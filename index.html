@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Limit Increase Revamp Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb bg-orb-left"></div>
+    <div class="bg-orb bg-orb-right"></div>
+
+    <main class="page-shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Clickable Product Story</p>
+          <h1>Limit Increase Upload Journey</h1>
+          <p class="hero-text">
+            This page maps the full journey from entry exposure to document submission,
+            risk review, and final limit increase, using real market data from
+            2026-04-01 to 2026-06-20.
+          </p>
+          <div class="hero-badges">
+            <span>Real market data</span>
+            <span>Clickable steps</span>
+            <span>Old vs New UI</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="step-section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Daily Report</p>
+            <h2>Click any step to inspect the metrics and optimization goal</h2>
+          </div>
+          <label class="day-picker">
+            <span>Select market</span>
+            <select id="daySelect"></select>
+          </label>
+        </div>
+
+        <div id="stepRail" class="step-rail"></div>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="card analytics-card">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">Funnel Snapshot</p>
+              <h2 id="selectedDayTitle">Real Conversion</h2>
+            </div>
+            <div class="legend-row">
+              <span class="legend-dot legend-current"></span>
+              <span>Current</span>
+            </div>
+          </div>
+
+          <div id="kpiGrid" class="kpi-grid"></div>
+          <div id="funnelBars" class="funnel-bars"></div>
+        </article>
+
+        <article class="card detail-card">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">Why It Matters</p>
+              <h2 id="detailTitle">Entry Click</h2>
+            </div>
+          </div>
+          <div id="detailVisual" class="detail-visual"></div>
+        </article>
+      </section>
+
+      <section class="full-width-section">
+        <article class="card reject-card">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">Reject Breakdown</p>
+              <h2>Reject Reason Distribution by Market</h2>
+            </div>
+          </div>
+          <div id="rejectReasonGrid" class="reject-reason-grid"></div>
+        </article>
+      </section>
+
+      <section class="full-width-section">
+        <article class="card chart-card">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">Market Trend</p>
+              <h2>Users by Step and Market</h2>
+            </div>
+          </div>
+          <div id="stepChart" class="step-chart"></div>
+        </article>
+      </section>
+
+      <section class="full-width-section">
+        <article class="card table-card">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">Market Breakdown</p>
+              <h2>Market Data Table</h2>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Market</th>
+                  <th>#1 View Entrance</th>
+                  <th>#2 Entry Click</th>
+                  <th>#3 Enter Upload Page</th>
+                  <th>#4 Submit Doc</th>
+                  <th>#5.1 Ops Screening</th>
+                  <th>#6 Risk Policy</th>
+                  <th>#7 Limit Increase Success</th>
+                  <th>Click -> Upload CR</th>
+                  <th>Doc Submit CR</th>
+                  <th>Ops Approval Rate</th>
+                  <th>UW Approval Rate</th>
+                  <th>E2E CR</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody id="dailyTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="full-width-section">
+        <article class="card ui-card">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">UI Compare</p>
+              <h2>Old UI vs New UI</h2>
+            </div>
+          </div>
+
+          <div id="uiShowcase" class="ui-showcase dual-ui-showcase"></div>
+        </article>
+      </section>
+
+      <section class="full-width-section lower-grid">
+        <article class="card talking-card">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">Feature Plan</p>
+              <h2>Feature Plan</h2>
+            </div>
+          </div>
+          <div id="talkingPoints" class="talking-points"></div>
+        </article>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
