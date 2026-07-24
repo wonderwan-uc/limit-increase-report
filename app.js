@@ -1,87 +1,414 @@
-const reportPeriod = "2026-04-01 ~ 2026-06-20";
+const reportPeriod = "2026-07-01 ~ 2026-07-15";
 
-const marketData = [
-  {
-    market: "ID",
-    viewEntrance: 270786,
-    entryClick: 46203,
-    enterUploadPage: 3062,
-    submitDoc: 90,
-    opsScreening: 67,
-    opsApproved: 23,
-    opsRejected: 44,
-    riskPolicy: 23,
-    riskApproved: 13,
-    riskRejected: 10,
-    limitIncreaseSuccess: 13,
-    approvalNote:
-      "ID will be the first region make revamp, will check data later, if CR raise well, we will migrate this revamp to other region.",
+const marketNotes = {
+  ID: "ID will be the first region make revamp, will check data later, if CR raise well, we will migrate this revamp to other region.",
+  MY: "We already developed cross-product sharing, but not roll out yet, we will remove 2W from sharing then roll out sharing.",
+  PH: "PH just raised FRF to make enhancement to improve CR, we will check in late Q3.",
+  VN: "VN's whitelist volume is very low, so we do not have enough sample to check CR.",
+  TH: "TH just added whitelist in June, traffic is increasing. TH's FE is similar to other regions but data is much better (maybe bankstatement is easier to get in TH).",
+};
+
+const productDatasets = {
+  SPL: [
+    {
+      market: "ID",
+      viewEntrance: 3525131,
+      entryClick: 282071,
+      enterUploadPage: 55329,
+      submitDoc: 1425,
+      opsScreening: 1082,
+      opsApproved: 285,
+      opsRejected: 797,
+      modelScreening: 343,
+      modelPassed: 0,
+      modelRejected: 343,
+      riskPolicy: 285,
+      riskApproved: 147,
+      riskRejected: 138,
+      limitIncreaseSuccess: 147,
+    },
+    {
+      market: "MY",
+      viewEntrance: 3960809,
+      entryClick: 85108,
+      enterUploadPage: 81940,
+      submitDoc: 2113,
+      opsScreening: 2113,
+      opsApproved: 1609,
+      opsRejected: 504,
+      modelScreening: 0,
+      modelPassed: 0,
+      modelRejected: 0,
+      riskPolicy: 1609,
+      riskApproved: 1020,
+      riskRejected: 589,
+      limitIncreaseSuccess: 1020,
+    },
+    {
+      market: "PH",
+      viewEntrance: 42982,
+      entryClick: 2432,
+      enterUploadPage: 2385,
+      submitDoc: 275,
+      opsScreening: 127,
+      opsApproved: 72,
+      opsRejected: 55,
+      modelScreening: 148,
+      modelPassed: 0,
+      modelRejected: 148,
+      riskPolicy: 72,
+      riskApproved: 32,
+      riskRejected: 40,
+      limitIncreaseSuccess: 32,
+    },
+    {
+      market: "VN",
+      viewEntrance: 85586,
+      entryClick: 3440,
+      enterUploadPage: 28095,
+      submitDoc: 385,
+      opsScreening: 385,
+      opsApproved: 171,
+      opsRejected: 214,
+      modelScreening: 0,
+      modelPassed: 0,
+      modelRejected: 0,
+      riskPolicy: 145,
+      riskApproved: 97,
+      riskRejected: 48,
+      limitIncreaseSuccess: 97,
+    },
+    {
+      market: "TH",
+      viewEntrance: 5156678,
+      entryClick: 482681,
+      enterUploadPage: 441986,
+      submitDoc: 48344,
+      opsScreening: 37761,
+      opsApproved: 35695,
+      opsRejected: 2066,
+      modelScreening: 10583,
+      modelPassed: 7457,
+      modelRejected: 3126,
+      riskPolicy: 43152,
+      riskApproved: 43009,
+      riskRejected: 143,
+      limitIncreaseSuccess: 43009,
+    },
+  ],
+  BCL: [
+    {
+      market: "ID",
+      viewEntrance: null,
+      entryClick: null,
+      enterUploadPage: null,
+      submitDoc: 2208,
+      opsScreening: 1677,
+      opsApproved: 358,
+      opsRejected: 1319,
+      modelScreening: 531,
+      modelPassed: 0,
+      modelRejected: 531,
+      riskPolicy: 358,
+      riskApproved: 152,
+      riskRejected: 206,
+      limitIncreaseSuccess: 152,
+      noteOverride: "View / click / upload data error, BI is checking.",
+    },
+    {
+      market: "MY",
+      viewEntrance: null,
+      entryClick: null,
+      enterUploadPage: null,
+      submitDoc: 3,
+      opsScreening: 3,
+      opsApproved: 2,
+      opsRejected: 1,
+      modelScreening: 0,
+      modelPassed: 0,
+      modelRejected: 0,
+      riskPolicy: 2,
+      riskApproved: 0,
+      riskRejected: 2,
+      limitIncreaseSuccess: 0,
+    },
+    {
+      market: "PH",
+      viewEntrance: null,
+      entryClick: null,
+      enterUploadPage: null,
+      submitDoc: 658,
+      opsScreening: 338,
+      opsApproved: 231,
+      opsRejected: 107,
+      modelScreening: 320,
+      modelPassed: 0,
+      modelRejected: 320,
+      riskPolicy: 231,
+      riskApproved: 113,
+      riskRejected: 118,
+      limitIncreaseSuccess: 113,
+    },
+    {
+      market: "VN",
+      viewEntrance: null,
+      entryClick: null,
+      enterUploadPage: null,
+      submitDoc: 511,
+      opsScreening: 511,
+      opsApproved: 39,
+      opsRejected: 472,
+      modelScreening: 0,
+      modelPassed: 0,
+      modelRejected: 0,
+      riskPolicy: 39,
+      riskApproved: 26,
+      riskRejected: 13,
+      limitIncreaseSuccess: 26,
+    },
+    {
+      market: "TH",
+      viewEntrance: null,
+      entryClick: null,
+      enterUploadPage: null,
+      submitDoc: 23662,
+      opsScreening: 19602,
+      opsApproved: 18543,
+      opsRejected: 1059,
+      modelScreening: 4060,
+      modelPassed: 2464,
+      modelRejected: 1596,
+      riskPolicy: 21007,
+      riskApproved: 21005,
+      riskRejected: 2,
+      limitIncreaseSuccess: 21005,
+    },
+  ],
+  SCL: [
+    { market: "ID", invited: 341751, viewed: 63712, started: 37732, submitted: 19921, approved: 9542 },
+    { market: "MY", invited: 21001, viewed: 8833, started: 4864, submitted: 2819, approved: 1935 },
+    { market: "PH", invited: 13463, viewed: 7834, started: 4736, submitted: 2850, approved: 1293 },
+    { market: "VN", invited: 594, viewed: 495, started: 288, submitted: 61, approved: 7 },
+    { market: "TH", invited: 22594, viewed: 3461, started: 1729, submitted: 797, approved: 222 },
+  ],
+};
+
+const productDefinitions = {
+  SPL: {
+    label: "SPL",
+    titleLabel: "SPL Funnel",
+    steps: [
+      { key: "viewEntrance", stepLabel: "STEP 1", label: "View Entrance" },
+      { key: "entryClick", stepLabel: "STEP 2", label: "Entry Click" },
+      { key: "enterUploadPage", stepLabel: "STEP 3", label: "Upload Page Visit" },
+      { key: "submitDoc", stepLabel: "STEP 4", label: "Document Submitted" },
+      { key: "opsScreening", stepLabel: "STEP 5.1", label: "Ops Screening" },
+      { key: "modelScreening", stepLabel: "STEP 5.2", label: "Model Screening" },
+      { key: "riskPolicy", stepLabel: "STEP 6", label: "Risk Policy" },
+      { key: "limitIncreaseSuccess", stepLabel: "STEP 7", label: "Limit Increase Success" },
+    ],
+    kpis: [
+      { label: "View -> Click CR", delta: "#2 / #1", digits: 2, calc: (item) => ratio(item.entryClick, item.viewEntrance) },
+      { label: "Click -> Upload Page CR", delta: "#3 / #2", digits: 2, calc: (item) => ratio(item.enterUploadPage, item.entryClick) },
+      { label: "Doc Submit CR", delta: "#4 / #3", digits: 2, calc: (item) => ratio(item.submitDoc, item.enterUploadPage) },
+      { label: "Ops Approval Rate", delta: "#5.1 pass / #5.1", digits: 2, calc: (item) => ratio(item.opsApproved, item.opsScreening) },
+      { label: "Model Pass Rate", delta: "#5.2 pass / #5.2", digits: 2, calc: (item) => ratio(item.modelPassed, item.modelScreening) },
+      { label: "UW Approval Rate", delta: "#7 / #6", digits: 2, calc: (item) => ratio(item.limitIncreaseSuccess, item.riskPolicy) },
+    ],
+    bars: [
+      { label: "View -> Click", leftLabel: "View", leftKey: "viewEntrance", rightLabel: "Click", rightKey: "entryClick" },
+      { label: "Click -> Upload Page", leftLabel: "Click", leftKey: "entryClick", rightLabel: "Visit", rightKey: "enterUploadPage" },
+      { label: "Upload Page -> Submit", leftLabel: "Visit", leftKey: "enterUploadPage", rightLabel: "Submit", rightKey: "submitDoc" },
+      { label: "Submit -> Ops Screening", leftLabel: "Submit", leftKey: "submitDoc", rightLabel: "Ops", rightKey: "opsScreening" },
+      { label: "Submit -> Model Screening", leftLabel: "Submit", leftKey: "submitDoc", rightLabel: "Model", rightKey: "modelScreening" },
+      { label: "Ops Screening -> Pass", leftLabel: "Ops", leftKey: "opsScreening", rightLabel: "Pass", rightKey: "opsApproved" },
+      { label: "Model Screening -> Pass", leftLabel: "Model", leftKey: "modelScreening", rightLabel: "Pass", rightKey: "modelPassed" },
+      { label: "Risk Policy -> Success", leftLabel: "Risk", leftKey: "riskPolicy", rightLabel: "Success", rightKey: "limitIncreaseSuccess" },
+      { label: "View -> Success", leftLabel: "View", leftKey: "viewEntrance", rightLabel: "Success", rightKey: "limitIncreaseSuccess", digits: 3 },
+    ],
+    tableColumns: [
+      { key: "market", label: "Market", type: "text" },
+      { key: "viewEntrance", label: "#1 View Entrance" },
+      { key: "entryClick", label: "#2 Click Entrance" },
+      { key: "enterUploadPage", label: "#3 Enter Upload Page" },
+      { key: "submitDoc", label: "#4 Submit Doc" },
+      { key: "opsScreening", label: "#5.1 Ops Screening" },
+      { key: "modelScreening", label: "#5.2 Model Screening" },
+      { key: "riskPolicy", label: "#6 Risk Policy" },
+      { key: "limitIncreaseSuccess", label: "#7 Limit Increase Success" },
+      { key: "viewToClickCr", label: "View -> Click CR", type: "percent", digits: 2, calc: (item) => ratio(item.entryClick, item.viewEntrance) },
+      { key: "clickToUploadCr", label: "Click -> Upload CR", type: "percent", digits: 2, calc: (item) => ratio(item.enterUploadPage, item.entryClick) },
+      { key: "submitCr", label: "Submit CR", type: "percent", digits: 2, calc: (item) => ratio(item.submitDoc, item.enterUploadPage) },
+      { key: "opsApprovalRate", label: "Ops Approval Rate", type: "percent", digits: 2, calc: (item) => ratio(item.opsApproved, item.opsScreening) },
+      { key: "modelPassRate", label: "Model Pass Rate", type: "percent", digits: 2, calc: (item) => ratio(item.modelPassed, item.modelScreening) },
+      { key: "uwApprovalRate", label: "UW Approval Rate", type: "percent", digits: 2, calc: (item) => ratio(item.limitIncreaseSuccess, item.riskPolicy) },
+      { key: "e2eCr", label: "E2E CR", type: "percent", digits: 3, calc: (item) => ratio(item.limitIncreaseSuccess, item.viewEntrance) },
+      { key: "note", label: "Note", type: "note" },
+    ],
+    chartSteps: [
+      { key: "viewEntrance", label: "Step 1", fullLabel: "View Entrance" },
+      { key: "entryClick", label: "Step 2", fullLabel: "Entry Click" },
+      { key: "enterUploadPage", label: "Step 3", fullLabel: "Upload Page" },
+      { key: "submitDoc", label: "Step 4", fullLabel: "Submit Doc" },
+      { key: "opsScreening", label: "Step 5.1", fullLabel: "Ops Screening" },
+      { key: "modelScreening", label: "Step 5.2", fullLabel: "Model Screening" },
+      { key: "riskPolicy", label: "Step 6", fullLabel: "Risk Policy" },
+      { key: "limitIncreaseSuccess", label: "Step 7", fullLabel: "Success" },
+    ],
   },
-  {
-    market: "MY",
-    viewEntrance: 242379,
-    entryClick: 15174,
-    enterUploadPage: 5430,
-    submitDoc: 219,
-    opsScreening: 219,
-    opsApproved: 101,
-    opsRejected: 118,
-    riskPolicy: 101,
-    riskApproved: 70,
-    riskRejected: 31,
-    limitIncreaseSuccess: 70,
-    approvalNote:
-      "We already developed cross-product sharing, but not roll out yet, we will remove 2W from sharing then roll out sharing.",
+  BCL: {
+    label: "BCL",
+    titleLabel: "BCL Funnel",
+    steps: [
+      { key: "submitDoc", stepLabel: "STEP 4", label: "Document Submitted" },
+      { key: "opsScreening", stepLabel: "STEP 5.1", label: "Ops Screening" },
+      { key: "modelScreening", stepLabel: "STEP 5.2", label: "Model Screening" },
+      { key: "riskPolicy", stepLabel: "STEP 6", label: "Risk Policy" },
+      { key: "limitIncreaseSuccess", stepLabel: "STEP 7", label: "Limit Increase Success" },
+    ],
+    kpis: [
+      { label: "Submit -> Ops Screening", delta: "#5.1 / #4", digits: 2, calc: (item) => ratio(item.opsScreening, item.submitDoc) },
+      { label: "Submit -> Model Screening", delta: "#5.2 / #4", digits: 2, calc: (item) => ratio(item.modelScreening, item.submitDoc) },
+      { label: "Ops Approval Rate", delta: "#5.1 pass / #5.1", digits: 2, calc: (item) => ratio(item.opsApproved, item.opsScreening) },
+      { label: "Model Pass Rate", delta: "#5.2 pass / #5.2", digits: 2, calc: (item) => ratio(item.modelPassed, item.modelScreening) },
+      { label: "UW Approval Rate", delta: "#7 / #6", digits: 2, calc: (item) => ratio(item.limitIncreaseSuccess, item.riskPolicy) },
+    ],
+    bars: [
+      { label: "Submit -> Ops Screening", leftLabel: "Submit", leftKey: "submitDoc", rightLabel: "Ops", rightKey: "opsScreening" },
+      { label: "Submit -> Model Screening", leftLabel: "Submit", leftKey: "submitDoc", rightLabel: "Model", rightKey: "modelScreening" },
+      { label: "Ops Screening -> Pass", leftLabel: "Ops", leftKey: "opsScreening", rightLabel: "Pass", rightKey: "opsApproved" },
+      { label: "Model Screening -> Pass", leftLabel: "Model", leftKey: "modelScreening", rightLabel: "Pass", rightKey: "modelPassed" },
+      { label: "Risk Policy -> Success", leftLabel: "Risk", leftKey: "riskPolicy", rightLabel: "Success", rightKey: "limitIncreaseSuccess" },
+    ],
+    tableColumns: [
+      { key: "market", label: "Market", type: "text" },
+      { key: "submitDoc", label: "#4 Submit Doc" },
+      { key: "opsScreening", label: "#5.1 Ops Screening" },
+      { key: "modelScreening", label: "#5.2 Model Screening" },
+      { key: "riskPolicy", label: "#6 Risk Policy" },
+      { key: "limitIncreaseSuccess", label: "#7 Limit Increase Success" },
+      { key: "submitToOpsCr", label: "Submit -> Ops CR", type: "percent", digits: 2, calc: (item) => ratio(item.opsScreening, item.submitDoc) },
+      { key: "submitToModelCr", label: "Submit -> Model CR", type: "percent", digits: 2, calc: (item) => ratio(item.modelScreening, item.submitDoc) },
+      { key: "opsApprovalRate", label: "Ops Approval Rate", type: "percent", digits: 2, calc: (item) => ratio(item.opsApproved, item.opsScreening) },
+      { key: "modelPassRate", label: "Model Pass Rate", type: "percent", digits: 2, calc: (item) => ratio(item.modelPassed, item.modelScreening) },
+      { key: "uwApprovalRate", label: "UW Approval Rate", type: "percent", digits: 2, calc: (item) => ratio(item.limitIncreaseSuccess, item.riskPolicy) },
+      { key: "note", label: "Note", type: "note" },
+    ],
+    chartSteps: [
+      { key: "submitDoc", label: "Step 4", fullLabel: "Submit Doc" },
+      { key: "opsScreening", label: "Step 5.1", fullLabel: "Ops Screening" },
+      { key: "modelScreening", label: "Step 5.2", fullLabel: "Model Screening" },
+      { key: "riskPolicy", label: "Step 6", fullLabel: "Risk Policy" },
+      { key: "limitIncreaseSuccess", label: "Step 7", fullLabel: "Success" },
+    ],
   },
-  {
-    market: "PH",
-    viewEntrance: 82253,
-    entryClick: 25650,
-    enterUploadPage: 106,
-    submitDoc: 14,
-    opsScreening: 11,
-    opsApproved: 4,
-    opsRejected: 7,
-    riskPolicy: 4,
-    riskApproved: 2,
-    riskRejected: 2,
-    limitIncreaseSuccess: 2,
-    approvalNote:
-      "PH just raised FRF to make enhancement to improve CR, we will check in late Q3.",
+  SCL: {
+    label: "SCL",
+    titleLabel: "SCL Funnel",
+    steps: [
+      { key: "invited", stepLabel: "STEP 1", label: "Invited" },
+      { key: "viewed", stepLabel: "STEP 2", label: "Viewed" },
+      { key: "started", stepLabel: "STEP 3", label: "Started" },
+      { key: "submitted", stepLabel: "STEP 4", label: "Submitted" },
+      { key: "approved", stepLabel: "STEP 5", label: "Approved" },
+    ],
+    kpis: [
+      { label: "Invite -> View CR", delta: "#2 / #1", digits: 2, calc: (item) => ratio(item.viewed, item.invited) },
+      { label: "View -> Start CR", delta: "#3 / #2", digits: 2, calc: (item) => ratio(item.started, item.viewed) },
+      { label: "Start -> Submit CR", delta: "#4 / #3", digits: 2, calc: (item) => ratio(item.submitted, item.started) },
+      { label: "Approval Rate", delta: "#5 / #4", digits: 2, calc: (item) => ratio(item.approved, item.submitted) },
+      { label: "E2E CR", delta: "#5 / #1", digits: 3, calc: (item) => ratio(item.approved, item.invited) },
+    ],
+    bars: [
+      { label: "Invited -> Viewed", leftLabel: "Invited", leftKey: "invited", rightLabel: "Viewed", rightKey: "viewed" },
+      { label: "Viewed -> Started", leftLabel: "Viewed", leftKey: "viewed", rightLabel: "Started", rightKey: "started" },
+      { label: "Started -> Submitted", leftLabel: "Started", leftKey: "started", rightLabel: "Submitted", rightKey: "submitted" },
+      { label: "Submitted -> Approved", leftLabel: "Submitted", leftKey: "submitted", rightLabel: "Approved", rightKey: "approved" },
+      { label: "Invited -> Approved", leftLabel: "Invited", leftKey: "invited", rightLabel: "Approved", rightKey: "approved", digits: 3 },
+    ],
+    tableColumns: [
+      { key: "market", label: "Market", type: "text" },
+      { key: "invited", label: "#1 Invited" },
+      { key: "viewed", label: "#2 Viewed" },
+      { key: "started", label: "#3 Started" },
+      { key: "submitted", label: "#4 Submitted" },
+      { key: "approved", label: "#5 Approved" },
+      { key: "inviteToViewCr", label: "Invite -> View CR", type: "percent", digits: 2, calc: (item) => ratio(item.viewed, item.invited) },
+      { key: "viewToStartCr", label: "View -> Start CR", type: "percent", digits: 2, calc: (item) => ratio(item.started, item.viewed) },
+      { key: "startToSubmitCr", label: "Start -> Submit CR", type: "percent", digits: 2, calc: (item) => ratio(item.submitted, item.started) },
+      { key: "approvalRate", label: "Approval Rate", type: "percent", digits: 2, calc: (item) => ratio(item.approved, item.submitted) },
+      { key: "e2eCr", label: "E2E CR", type: "percent", digits: 3, calc: (item) => ratio(item.approved, item.invited) },
+      { key: "note", label: "Note", type: "note" },
+    ],
+    chartSteps: [
+      { key: "invited", label: "Step 1", fullLabel: "Invited" },
+      { key: "viewed", label: "Step 2", fullLabel: "Viewed" },
+      { key: "started", label: "Step 3", fullLabel: "Started" },
+      { key: "submitted", label: "Step 4", fullLabel: "Submitted" },
+      { key: "approved", label: "Step 5", fullLabel: "Approved" },
+    ],
   },
-  {
-    market: "VN",
-    viewEntrance: 14778,
-    entryClick: 14278,
-    enterUploadPage: 111,
-    submitDoc: 2,
-    opsScreening: null,
-    opsApproved: null,
-    opsRejected: null,
-    riskPolicy: 0,
-    riskApproved: 0,
-    riskRejected: 0,
-    limitIncreaseSuccess: 0,
-    approvalNote:
-      "VN's whitelist volume is very low, so we do not have enough sample to check CR.",
+};
+
+const stepDetailDefinitions = {
+  viewEntrance: {
+    summary: "Users first need to discover the limit increase entry before any conversion can happen.",
+    formula: "Tracked as #1 View Entrance.",
+    visual: { src: "./assets/entry-view-spaylater.png", alt: "SPayLater entry surfaces for higher limit discovery" },
   },
-  {
-    market: "TH",
-    viewEntrance: 19529,
-    entryClick: 13801,
-    enterUploadPage: 10547,
-    submitDoc: 1670,
-    opsScreening: 1541,
-    opsApproved: 1463,
-    opsRejected: 78,
-    riskPolicy: 1741,
-    riskApproved: 1626,
-    riskRejected: 115,
-    limitIncreaseSuccess: 1409,
-    approvalNote:
-      "TH just added whitelist in June, traffic is increasing. TH's FE is similar to other regions but data is much better (maybe bankstatement is easier to get in TH).",
+  entryClick: {
+    summary: "This step reflects whether the entry copy and placement are attractive enough to trigger intent.",
+    formula: "Tracked as #2 Click Entrance.",
   },
-];
+  enterUploadPage: {
+    summary: "This step shows whether users continue after clicking and successfully land on the upload experience.",
+    formula: "Tracked as #3 Enter Upload Page.",
+    visual: { src: "./assets/upload-page-limit-form.png", alt: "Upload page for higher credit limit documents" },
+  },
+  submitDoc: {
+    summary: "This is the first strong commitment point where the user actually submits documents into the flow.",
+    formula: "Tracked as #4 Submit Doc.",
+    visual: { src: "./assets/document-submitted-under-review.png", alt: "Document submitted and under review state" },
+  },
+  opsScreening: {
+    summary: "Operations screening validates submitted documents before they can move deeper into the review flow.",
+    formula: "Tracked as #5.1 Ops Screening.",
+    visual: { src: "./assets/screening-passed-review-console.png", alt: "Operations screening review console", compact: true },
+  },
+  modelScreening: {
+    summary: "Model screening automatically filters document quality and eligibility after submission.",
+    formula: "Tracked as #5.2 Model Screening.",
+  },
+  riskPolicy: {
+    summary: "Risk policy review decides whether the screened cases are eligible for final limit increase approval.",
+    formula: "Tracked as #6 Risk Policy.",
+  },
+  limitIncreaseSuccess: {
+    summary: "This is the final approved outcome and the end-to-end business result for SPL and BCL.",
+    formula: "Tracked as #7 Limit Increase Success.",
+    visualType: "success-distribution",
+  },
+  invited: {
+    summary: "SCL starts from the invited population rather than an upload funnel entrance.",
+    formula: "Tracked as #1 Invited.",
+  },
+  viewed: {
+    summary: "This step shows how many invited users actually viewed the SCL offer or prompt.",
+    formula: "Tracked as #2 Viewed.",
+  },
+  started: {
+    summary: "This step shows how many users began the SCL flow after viewing it.",
+    formula: "Tracked as #3 Started.",
+  },
+  submitted: {
+    summary: "This step shows how many started users completed the SCL submission.",
+    formula: "Tracked as #4 Submitted.",
+  },
+  approved: {
+    summary: "This is the final approved outcome for the SCL flow.",
+    formula: "Tracked as #5 Approved.",
+  },
+};
 
 const successDistribution = [
   {
@@ -113,9 +440,7 @@ const successDistribution = [
   {
     market: "TH",
     color: "#8ecae6",
-    temp: [
-      { range: "(60,80]", value: 13, display: "13%" },
-    ],
+    temp: [{ range: "(60,80]", value: 13, display: "13%" }],
     perm: [
       { range: "(0,100]", value: 80, display: "80%" },
       { range: "(100,200]", value: 2, display: "2%" },
@@ -132,7 +457,6 @@ const rejectReasonDistribution = [
     color: "#ffb35c",
     note: "",
     reasons: [
-      { label: "Insufficient Doc", value: 0 },
       { label: "Unofficial Doc", value: 42 },
       { label: "Mismatch Doc Type", value: 8 },
       { label: "Not Recent Doc", value: 8 },
@@ -140,6 +464,7 @@ const rejectReasonDistribution = [
       { label: "Low Quality Doc", value: 2 },
       { label: "Password protected", value: 1 },
       { label: "Hard Reject", value: 1 },
+      { label: "Insufficient Doc", value: 0 },
       { label: "Doc Amount Not Match", value: 0 },
       { label: "Others", value: 0 },
     ],
@@ -151,13 +476,13 @@ const rejectReasonDistribution = [
     reasons: [
       { label: "Insufficient Doc", value: 51 },
       { label: "Unofficial Doc", value: 16 },
-      { label: "Mismatch Doc Type", value: 9 },
       { label: "Not Recent Doc", value: 14 },
+      { label: "Doc Amount Not Match", value: 12 },
+      { label: "Password protected", value: 10 },
+      { label: "Mismatch Doc Type", value: 9 },
       { label: "Mismatch Name/NRIC/ID", value: 5 },
       { label: "Low Quality Doc", value: 2 },
-      { label: "Password protected", value: 10 },
       { label: "Hard Reject", value: 1 },
-      { label: "Doc Amount Not Match", value: 12 },
       { label: "Others", value: 0 },
     ],
   },
@@ -166,16 +491,16 @@ const rejectReasonDistribution = [
     color: "#2ec4b6",
     note: "",
     reasons: [
+      { label: "Others", value: 4 },
+      { label: "Not Recent Doc", value: 2 },
       { label: "Insufficient Doc", value: 1 },
       { label: "Unofficial Doc", value: 1 },
       { label: "Mismatch Doc Type", value: 1 },
-      { label: "Not Recent Doc", value: 2 },
+      { label: "Password protected", value: 1 },
       { label: "Mismatch Name/NRIC/ID", value: 0 },
       { label: "Low Quality Doc", value: 0 },
-      { label: "Password protected", value: 1 },
       { label: "Hard Reject", value: 0 },
       { label: "Doc Amount Not Match", value: 0 },
-      { label: "Others", value: 4 },
     ],
   },
   {
@@ -189,13 +514,13 @@ const rejectReasonDistribution = [
     color: "#1982c4",
     note: "",
     reasons: [
-      { label: "Insufficient Doc", value: 0 },
-      { label: "Unofficial Doc", value: 2 },
       { label: "Mismatch Doc Type", value: 94 },
-      { label: "Not Recent Doc", value: 37 },
       { label: "Mismatch Name/NRIC/ID", value: 77 },
+      { label: "Not Recent Doc", value: 37 },
+      { label: "Unofficial Doc", value: 2 },
       { label: "Low Quality Doc", value: 1 },
       { label: "Password protected", value: 1 },
+      { label: "Insufficient Doc", value: 0 },
       { label: "Hard Reject", value: 0 },
       { label: "Doc Amount Not Match", value: 0 },
       { label: "Others", value: 0 },
@@ -203,95 +528,12 @@ const rejectReasonDistribution = [
   },
 ];
 
-const stepDefinitions = [
-  {
-    key: "viewEntrance",
-    label: "Entry View",
-    summary: "This step focuses on whether users can discover the limit-increase journey at all.",
-    points: [
-      "Add more entrances for limit increase.",
-    ],
-    goals: [
-      "Increase exposure.",
-    ],
-    visual: {
-      src: "./assets/entry-view-spaylater.png",
-      alt: "SPayLater entry examples for higher limit discovery",
-    },
-  },
-  {
-    key: "entryClick",
-    label: "Entry Click",
-    summary: "This step reflects whether the entry messaging is attractive enough to trigger a click.",
-    points: [
-      "Add stronger marketing selling points at the entry.",
-    ],
-    goals: [
-      "Increase attractiveness.",
-    ],
-    visual: {
-      src: "./assets/entry-click-spaylater.png",
-      alt: "SPayLater entry surfaces for higher limit click conversion",
-    },
-  },
-  {
-    key: "enterUploadPage",
-    label: "Enter Upload Page",
-    summary: "This step focuses on whether users can continue the flow smoothly after they land on the upload page.",
-    points: [
-      "Allow users to submit documents one by one on the upload page and show real-time status on the home page.",
-    ],
-    goals: [
-      "Reduce friction and make progress more visible.",
-    ],
-    visual: {
-      src: "./assets/upload-page-limit-form.png",
-      alt: "Higher credit limit upload page with income declaration and document upload form",
-    },
-  },
-  {
-    key: "submitDoc",
-    label: "Submit Document",
-    summary: "Submission is the most important front-end step and the most direct conversion target for the revamp.",
-    points: [
-      "Integrate with Quality Check model, block some invalid files directly.",
-    ],
-    goals: [
-      "Increase risk approval rate, decrease ops screening effort.",
-    ],
-    visual: {
-      src: "./assets/document-submitted-under-review.png",
-      alt: "Limit increase application under review confirmation page",
-    },
-  },
-  {
-    key: "riskPolicy",
-    label: "Screening Passed",
-    summary: "This step shows how many tickets can move from front-end submission into final underwriting review.",
-    points: [
-      "Improve pre-check quality so fewer invalid files flow into manual screening and underwriting.",
-    ],
-    goals: [
-      "Increase review efficiency and raise valid case quality.",
-    ],
-    visual: {
-      src: "./assets/screening-passed-review-console.png",
-      alt: "Screening review console with document validation fields",
-      compact: true,
-    },
-  },
-  {
-    key: "limitIncreaseSuccess",
-    label: "Limit Increase Success",
-    summary: "This is the final end-to-end business outcome and reflects whether the full flow can deliver real limit uplift.",
-    points: [
-      "Use better guidance, quality check, and resubmission support to drive more approved users to final success.",
-    ],
-    goals: [
-      "Increase final limit increase success volume.",
-    ],
-    visualType: "success-distribution",
-  },
+const whitelistOtaUpdatedAt = "2026-07-24";
+
+const whitelistOtaData = [
+  { track: "SPL", ID: "Whitelist 3M", MY: "Whitelist 900k", PH: "Whitelist 100k", TH: "OTA", VN: "Whitelist 18k" },
+  { track: "BCL", ID: "Whitelist 700k", MY: "Not used", PH: "Whitelist 100k", TH: "OTA", VN: "Whitelist 18k" },
+  { track: "SCL", ID: "Whitelist 341,751", MY: "Whitelist 21,001", PH: "Whitelist 13,463", TH: "Whitelist 22,594", VN: "Whitelist 594" },
 ];
 
 const uiPanels = [
@@ -338,11 +580,54 @@ const uiPanels = [
   },
 ];
 
-const talkingPoints = [
-  "ID SPL/BCL Revamp: ETA July v2",
-  "ID SME Enhance: ETA Aug v1",
-  "Other Region SPL/BCL: PH just raised FRF",
-  "MY Income Doc Streamline",
+const featureProgressGroups = [
+  {
+    stage: "Live Testing",
+    items: [
+      {
+        eta: "July v1",
+        feature: "[MY][SPL/BCL/TL/2W] remove 2W from sharing",
+      },
+    ],
+  },
+  {
+    stage: "UAT",
+    items: [],
+  },
+  {
+    stage: "Under Dev",
+    items: [
+      {
+        eta: "July v2",
+        feature: "[ID][SPL/BCL] CLI Revamp",
+      },
+      {
+        eta: "TBD",
+        feature: "[MY][SPL/BCL/TL/2W] Income Streamline",
+      },
+      {
+        eta: "July v1",
+        feature: "Entrance Data tracking point fix",
+      },
+    ],
+  },
+  {
+    stage: "PRD Preparing",
+    items: [
+      {
+        eta: "Aug v1",
+        feature: "[ID][SCL] Enhancement",
+      },
+      {
+        eta: "Aug v2",
+        feature: "[PH][SPL/BCL] CLI Revamp + QC model",
+      },
+      {
+        eta: "Sep",
+        feature: "[SG][SPL] CLI",
+      },
+    ],
+  },
 ];
 
 const chartSeries = [
@@ -353,17 +638,9 @@ const chartSeries = [
   { key: "TH", color: "#1982c4" },
 ];
 
-const chartSteps = [
-  { key: "viewEntrance", label: "Step 1", fullLabel: "View Entrance" },
-  { key: "entryClick", label: "Step 2", fullLabel: "Entry Click" },
-  { key: "enterUploadPage", label: "Step 3", fullLabel: "Enter Upload Page" },
-  { key: "submitDoc", label: "Step 4", fullLabel: "Submit Doc" },
-  { key: "riskPolicy", label: "Step 5", fullLabel: "Risk Policy" },
-  { key: "limitIncreaseSuccess", label: "Step 6", fullLabel: "Limit Increase Success" },
-];
-
 const refs = {
   daySelect: document.querySelector("#daySelect"),
+  productSelect: document.querySelector("#productSelect"),
   stepRail: document.querySelector("#stepRail"),
   selectedDayTitle: document.querySelector("#selectedDayTitle"),
   kpiGrid: document.querySelector("#kpiGrid"),
@@ -371,14 +648,18 @@ const refs = {
   detailTitle: document.querySelector("#detailTitle"),
   detailVisual: document.querySelector("#detailVisual"),
   rejectReasonGrid: document.querySelector("#rejectReasonGrid"),
+  dailyTableHead: document.querySelector("#dailyTableHead"),
   dailyTableBody: document.querySelector("#dailyTableBody"),
+  whitelistUpdatedAt: document.querySelector("#whitelistUpdatedAt"),
+  whitelistOtaBody: document.querySelector("#whitelistOtaBody"),
   stepChart: document.querySelector("#stepChart"),
   uiShowcase: document.querySelector("#uiShowcase"),
-  talkingPoints: document.querySelector("#talkingPoints"),
+  featureProgress: document.querySelector("#featureProgress"),
 };
 
 const state = {
   selectedMarket: "MY",
+  selectedProduct: "SPL",
   selectedStep: "submitDoc",
 };
 
@@ -386,6 +667,8 @@ bootstrap();
 
 function bootstrap() {
   renderMarketOptions();
+  renderProductOptions();
+  ensureSelectedStep();
   bindEvents();
   renderAll();
 }
@@ -395,21 +678,29 @@ function bindEvents() {
     state.selectedMarket = event.target.value;
     renderAll();
   });
+
+  refs.productSelect.addEventListener("change", (event) => {
+    state.selectedProduct = event.target.value;
+    ensureSelectedStep();
+    renderAll();
+  });
 }
 
 function renderAll() {
+  ensureSelectedStep();
   renderStepRail();
   renderKpis();
   renderDetail();
   renderRejectReasonDistribution();
   renderStepChart();
   renderMarketTable();
+  renderWhitelistOta();
   renderUiShowcase();
-  renderTalkingPoints();
+  renderFeatureProgress();
 }
 
 function renderMarketOptions() {
-  refs.daySelect.innerHTML = marketData
+  refs.daySelect.innerHTML = getCurrentDataset()
     .map(
       (item) =>
         `<option value="${item.market}" ${item.market === state.selectedMarket ? "selected" : ""}>${item.market}</option>`,
@@ -417,56 +708,26 @@ function renderMarketOptions() {
     .join("");
 }
 
-function renderStepRail() {
-  const selected = getSelectedMarket();
-  const cards = [
-    {
-      key: "viewEntrance",
-      label: "Entry View",
-      count: selected.viewEntrance,
-      hint: "View Entrance",
-    },
-    {
-      key: "entryClick",
-      label: "Entry Click",
-      count: selected.entryClick,
-      hint: `Click / View ${displayPercent(ratio(selected.entryClick, selected.viewEntrance))}`,
-    },
-    {
-      key: "enterUploadPage",
-      label: "Upload Page Visit",
-      count: selected.enterUploadPage,
-      hint: `#3 / #1 ${displayPercent(enterRate(selected))}`,
-    },
-    {
-      key: "submitDoc",
-      label: "Document Submitted",
-      count: selected.submitDoc,
-      hint: `#4 / #3 ${displayPercent(submitRate(selected))}`,
-    },
-    {
-      key: "riskPolicy",
-      label: "Screening Passed",
-      count: selected.riskPolicy,
-      hint: `#6 ${formatNumber(selected.riskPolicy)}`,
-    },
-    {
-      key: "limitIncreaseSuccess",
-      label: "Limit Increase Success",
-      count: selected.limitIncreaseSuccess,
-      hint: `#7 / #1 ${displayPercent(e2eRate(selected), 3)}`,
-    },
-  ];
-
-  refs.stepRail.innerHTML = cards
+function renderProductOptions() {
+  refs.productSelect.innerHTML = Object.keys(productDefinitions)
     .map(
-      (item, index) => `
-        <button class="step-card ${item.key === state.selectedStep ? "active" : ""}" data-step="${
-          item.key
-        }">
-          <small>STEP ${index + 1}</small>
-          <strong>${item.label}</strong>
-          <p>${formatNumber(item.count)}</p>
+      (product) =>
+        `<option value="${product}" ${product === state.selectedProduct ? "selected" : ""}>${product}</option>`,
+    )
+    .join("");
+}
+
+function renderStepRail() {
+  const selected = getSelectedRecord();
+  const steps = getCurrentProductDefinition().steps;
+
+  refs.stepRail.innerHTML = steps
+    .map(
+      (step) => `
+        <button class="step-card ${step.key === state.selectedStep ? "active" : ""}" data-step="${step.key}">
+          <small>${step.stepLabel}</small>
+          <strong>${step.label}</strong>
+          <p>${formatNumber(selected[step.key])}</p>
         </button>
       `,
     )
@@ -482,118 +743,86 @@ function renderStepRail() {
 }
 
 function renderKpis() {
-  const selected = getSelectedMarket();
-  refs.selectedDayTitle.textContent = `${selected.market} Real Funnel (${reportPeriod})`;
+  const selected = getSelectedRecord();
+  const productDef = getCurrentProductDefinition();
 
-  const kpis = [
-    { label: "Click -> Upload Page CR", value: displayPercent(clickToUploadRate(selected)), delta: "#3 / #2" },
-    { label: "Doc Submit CR", value: displayPercent(submitRate(selected)), delta: "#4 / #3" },
-    { label: "Ops Approval Rate", value: displayPercent(opsApprovalRate(selected)), delta: "#5 / #4" },
-    { label: "UW Approval Rate", value: displayPercent(uwApprovalRate(selected)), delta: "#6 / #5" },
-  ];
+  refs.selectedDayTitle.textContent = `${selected.market} ${productDef.titleLabel} (${reportPeriod})`;
 
-  refs.kpiGrid.innerHTML = kpis
+  refs.kpiGrid.innerHTML = productDef.kpis
     .map(
       (item) =>
-        `<div class="kpi-card"><span>${item.label}</span><strong>${item.value}</strong><em>${item.delta}</em></div>`,
+        `<div class="kpi-card"><span>${item.label}</span><strong>${displayPercent(
+          item.calc(selected),
+          item.digits ?? 2,
+        )}</strong><em>${item.delta}</em></div>`,
     )
     .join("");
 
-  const bars = [
-    {
-      label: "View -> Click",
-      leftLabel: "View",
-      leftCount: selected.viewEntrance,
-      rightLabel: "Click",
-      rightCount: selected.entryClick,
-      value: ratio(selected.entryClick, selected.viewEntrance),
-    },
-    {
-      label: "Click -> Upload Page",
-      leftLabel: "Click",
-      leftCount: selected.entryClick,
-      rightLabel: "Visit",
-      rightCount: selected.enterUploadPage,
-      value: clickToUploadRate(selected),
-    },
-    {
-      label: "Upload Page -> Submit",
-      leftLabel: "Visit",
-      leftCount: selected.enterUploadPage,
-      rightLabel: "Submit",
-      rightCount: selected.submitDoc,
-      value: submitRate(selected),
-    },
-    {
-      label: "Ops Screening -> Pass",
-      leftLabel: "Ops",
-      leftCount: selected.opsScreening,
-      rightLabel: "Pass",
-      rightCount: selected.opsApproved,
-      value: opsApprovalRate(selected),
-    },
-    {
-      label: "Risk Policy -> Success",
-      leftLabel: "Risk",
-      leftCount: selected.riskPolicy,
-      rightLabel: "Success",
-      rightCount: selected.limitIncreaseSuccess,
-      value: successRate(selected),
-    },
-    {
-      label: "View -> Success",
-      leftLabel: "View",
-      leftCount: selected.viewEntrance,
-      rightLabel: "Success",
-      rightCount: selected.limitIncreaseSuccess,
-      value: e2eRate(selected),
-      digits: 3,
-    },
-  ];
-
-  refs.funnelBars.innerHTML = bars
-    .map(
-      (item) => `
+  refs.funnelBars.innerHTML = productDef.bars
+    .map((item) => {
+      const leftCount = selected[item.leftKey];
+      const rightCount = selected[item.rightKey];
+      return `
         <div class="funnel-row">
           <div class="funnel-meta">
             <strong>${item.label}</strong>
             <div class="funnel-counts">
-              <span>${item.leftLabel}: ${formatNumber(item.leftCount)}</span>
-              <span>${item.rightLabel}: ${formatNumber(item.rightCount)}</span>
+              <span>${item.leftLabel}: ${formatNumber(leftCount)}</span>
+              <span>${item.rightLabel}: ${formatNumber(rightCount)}</span>
             </div>
           </div>
           <div>
             <div class="bar-track">
-              <div class="bar-current" style="width: ${barWidth(item.value)}%"></div>
+              <div class="bar-current" style="width: ${barWidth(ratio(rightCount, leftCount))}%"></div>
             </div>
             <div class="bar-values">
-              <span>${displayPercent(item.value, item.digits ?? 2)}</span>
+              <span>${displayPercent(ratio(rightCount, leftCount), item.digits ?? 2)}</span>
             </div>
           </div>
         </div>
-      `,
-    )
+      `;
+    })
     .join("");
 }
 
 function renderDetail() {
-  const definition =
-    stepDefinitions.find((item) => item.key === state.selectedStep) ?? stepDefinitions[0];
+  const stepDef = getCurrentStepDefinition();
+  const detailDef = stepDetailDefinitions[state.selectedStep] ?? {};
 
-  refs.detailTitle.textContent = definition.label;
-  if (definition.visualType === "success-distribution") {
+  refs.detailTitle.textContent = stepDef.label;
+
+  if (detailDef.visualType === "success-distribution") {
     refs.detailVisual.innerHTML = renderSuccessDistribution();
     return;
   }
 
-  refs.detailVisual.innerHTML = definition.visual
-    ? `<div class="detail-visual-frame ${definition.visual.compact ? "compact" : ""}"><img class="detail-visual-image ${definition.visual.compact ? "compact" : ""}" src="${definition.visual.src}" alt="${definition.visual.alt}" /></div>`
-    : "";
+  refs.detailVisual.innerHTML = `
+    <div class="callout-list">
+      <div class="callout-item">
+        <strong>${state.selectedProduct} · ${stepDef.label}</strong>
+        <p>${detailDef.summary ?? "This step shows the current conversion volume for the selected market and product."}</p>
+      </div>
+      <div class="callout-item">
+        <strong>Tracking logic</strong>
+        <p>${detailDef.formula ?? "Displayed directly from the selected product dataset."}</p>
+      </div>
+    </div>
+    ${
+      detailDef.visual
+        ? `<div class="detail-visual-frame ${detailDef.visual.compact ? "compact" : ""}">
+            <img class="detail-visual-image ${detailDef.visual.compact ? "compact" : ""}" src="${detailDef.visual.src}" alt="${detailDef.visual.alt}" />
+          </div>`
+        : ""
+    }
+  `;
 }
 
 function renderSuccessDistribution() {
-  const selectedDistribution =
-    successDistribution.find((item) => item.market === state.selectedMarket) ?? successDistribution[0];
+  const selectedDistribution = successDistribution.find((item) => item.market === state.selectedMarket);
+
+  if (!selectedDistribution) {
+    return `<div class="callout-item"><p>No limit increase mix is available for the selected market.</p></div>`;
+  }
 
   return `
     <div class="success-chart-panel">
@@ -638,10 +867,7 @@ function renderSuccessGroup(title, rows, color) {
                   <strong>${row.display}</strong>
                 </div>
                 <div class="success-bar-track">
-                  <div class="success-bar-fill" style="width:${Math.max(
-                    6,
-                    Math.min(100, row.value),
-                  )}%; background:${color};"></div>
+                  <div class="success-bar-fill" style="width:${Math.max(6, Math.min(100, row.value))}%; background:${color};"></div>
                 </div>
               </div>
             `,
@@ -653,29 +879,41 @@ function renderSuccessGroup(title, rows, color) {
 }
 
 function renderMarketTable() {
-  refs.dailyTableBody.innerHTML = marketData
+  const dataset = getCurrentDataset();
+  const productDef = getCurrentProductDefinition();
+
+  refs.dailyTableHead.innerHTML = productDef.tableColumns
+    .map((column) => `<th>${column.label}</th>`)
+    .join("");
+
+  refs.dailyTableBody.innerHTML = dataset
     .map((item) => {
-      const selectedClass = item.market === state.selectedMarket ? ' class="strong-cell"' : "";
+      const isSelected = item.market === state.selectedMarket;
       return `
         <tr>
-          <td${selectedClass}>${item.market}</td>
-          <td>${formatNumber(item.viewEntrance)}</td>
-          <td>${formatNumber(item.entryClick)}</td>
-          <td>${formatNumber(item.enterUploadPage)}</td>
-          <td>${formatNumber(item.submitDoc)}</td>
-          <td>${formatNumber(item.opsScreening)}</td>
-          <td>${formatNumber(item.riskPolicy)}</td>
-          <td>${formatNumber(item.limitIncreaseSuccess)}</td>
-          <td>${displayPercent(clickToUploadRate(item))}</td>
-          <td>${displayPercent(submitRate(item))}</td>
-          <td>${displayPercent(opsApprovalRate(item))}</td>
-          <td>${displayPercent(uwApprovalRate(item))}</td>
-          <td>${displayPercent(e2eRate(item), 3)}</td>
-          <td>${item.approvalNote}</td>
+          ${productDef.tableColumns
+            .map((column) => renderTableCell(item, column, isSelected))
+            .join("")}
         </tr>
       `;
     })
     .join("");
+}
+
+function renderTableCell(item, column, isSelected) {
+  if (column.type === "text") {
+    return `<td${isSelected ? ' class="strong-cell"' : ""}>${item.market}</td>`;
+  }
+
+  if (column.type === "note") {
+    return `<td>${item.noteOverride ?? marketNotes[item.market] ?? "-"}</td>`;
+  }
+
+  if (column.type === "percent") {
+    return `<td>${displayPercent(column.calc(item), column.digits ?? 2)}</td>`;
+  }
+
+  return `<td>${formatNumber(item[column.key])}</td>`;
 }
 
 function renderRejectReasonDistribution() {
@@ -683,9 +921,7 @@ function renderRejectReasonDistribution() {
 
   refs.rejectReasonGrid.innerHTML = rejectReasonDistribution
     .map((market) => {
-      const sortedReasons = [...market.reasons].sort((a, b) => b.value - a.value);
-      const maxValue = Math.max(...sortedReasons.map((item) => item.value), 0);
-
+      const maxValue = Math.max(...market.reasons.map((item) => item.value), 0);
       return `
         <section class="reject-market-card">
           <div class="reject-market-head">
@@ -711,7 +947,7 @@ function renderRejectReasonDistribution() {
                   </div>
                 </div>`
               : `<div class="reject-bars">
-                  ${sortedReasons
+                  ${market.reasons
                     .map((item) => {
                       const width = maxValue > 0 ? Math.max(6, (item.value / maxValue) * 100) : 0;
                       return `
@@ -735,20 +971,45 @@ function renderRejectReasonDistribution() {
     .join("");
 }
 
+function renderWhitelistOta() {
+  refs.whitelistUpdatedAt.textContent = whitelistOtaUpdatedAt;
+  refs.whitelistOtaBody.innerHTML = whitelistOtaData
+    .map(
+      (item) => `
+        <tr>
+          <td class="${item.track === state.selectedProduct ? "strong-cell" : ""}">${item.track}</td>
+          <td class="${state.selectedMarket === "ID" ? "strong-cell" : ""}">${item.ID}</td>
+          <td class="${state.selectedMarket === "MY" ? "strong-cell" : ""}">${item.MY}</td>
+          <td class="${state.selectedMarket === "PH" ? "strong-cell" : ""}">${item.PH}</td>
+          <td class="${state.selectedMarket === "TH" ? "strong-cell" : ""}">${item.TH}</td>
+          <td class="${state.selectedMarket === "VN" ? "strong-cell" : ""}">${item.VN}</td>
+        </tr>
+      `,
+    )
+    .join("");
+}
+
 function renderStepChart() {
-  const width = 1120;
+  const dataset = getCurrentDataset();
+  const chartSteps = getCurrentProductDefinition().chartSteps;
+  const width = Math.max(920, 180 * chartSteps.length);
   const height = 460;
   const margin = { top: 32, right: 36, bottom: 84, left: 88 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
-  const maxValue = Math.max(...marketData.flatMap((item) => chartSteps.map((step) => item[step.key])));
+  const maxValue = Math.max(
+    ...dataset.flatMap((item) =>
+      chartSteps.map((step) => (Number.isFinite(item[step.key]) ? item[step.key] : 0)),
+    ),
+  );
+  const safeMaxValue = Math.max(maxValue, 1);
   const tickCount = 4;
   const yTicks = Array.from({ length: tickCount + 1 }, (_, index) =>
-    Math.round((maxValue / tickCount) * (tickCount - index)),
+    Math.round((safeMaxValue / tickCount) * (tickCount - index)),
   );
 
-  const y = (value) => margin.top + innerHeight - (value / maxValue) * innerHeight;
-  const x = (index) => margin.left + (innerWidth / (chartSteps.length - 1)) * index;
+  const y = (value) => margin.top + innerHeight - (value / safeMaxValue) * innerHeight;
+  const x = (index) => margin.left + (innerWidth / Math.max(chartSteps.length - 1, 1)) * index;
 
   const gridLines = yTicks
     .map(
@@ -772,15 +1033,16 @@ function renderStepChart() {
 
   const series = chartSeries
     .map((seriesItem) => {
-      const market = marketData.find((item) => item.market === seriesItem.key);
-      const points = chartSteps
-        .map((step, index) => `${x(index)},${y(market[step.key])}`)
-        .join(" ");
+      const market = dataset.find((item) => item.market === seriesItem.key);
+      if (!market) {
+        return "";
+      }
 
+      const points = chartSteps.map((step, index) => `${x(index)},${y(Number.isFinite(market[step.key]) ? market[step.key] : 0)}`).join(" ");
       const circles = chartSteps
         .map(
           (step, index) => `
-            <circle cx="${x(index)}" cy="${y(market[step.key])}" r="${
+            <circle cx="${x(index)}" cy="${y(Number.isFinite(market[step.key]) ? market[step.key] : 0)}" r="${
               state.selectedMarket === market.market ? 5 : 4
             }" fill="${seriesItem.color}" class="chart-point" />
           `,
@@ -803,6 +1065,7 @@ function renderStepChart() {
     .join("");
 
   const legend = chartSeries
+    .filter((item) => dataset.some((market) => market.market === item.key))
     .map(
       (item) => `
         <div class="chart-legend-item ${state.selectedMarket === item.key ? "active" : ""}">
@@ -816,7 +1079,7 @@ function renderStepChart() {
   refs.stepChart.innerHTML = `
     <div class="chart-legend">${legend}</div>
     <div class="chart-frame">
-      <svg viewBox="0 0 ${width} ${height}" class="chart-svg" role="img" aria-label="Line chart of users by step and market">
+      <svg viewBox="0 0 ${width} ${height}" class="chart-svg" role="img" aria-label="Line chart of users by step, market, and product">
         ${gridLines}
         <line x1="${margin.left}" y1="${margin.top + innerHeight}" x2="${width - margin.right}" y2="${
           margin.top + innerHeight
@@ -861,49 +1124,61 @@ function renderUiShowcase() {
     .join("");
 }
 
-function renderTalkingPoints() {
-  refs.talkingPoints.innerHTML = talkingPoints
+function renderFeatureProgress() {
+  refs.featureProgress.innerHTML = featureProgressGroups
     .map(
-      (item, index) =>
-        `<div class="talking-pill" data-index="${index + 1}"><p>${item}</p></div>`,
+      (group) => `
+        <section class="progress-group">
+          <div class="progress-stage">${group.stage}</div>
+          ${
+            group.items.length
+              ? `<div class="progress-items">
+                  ${group.items
+                    .map(
+                      (item) => `
+                        <article class="progress-item">
+                          <div class="progress-row">
+                            <span class="progress-label">ETA</span>
+                            <strong>${item.eta}</strong>
+                          </div>
+                          <div class="progress-row progress-feature">
+                            <span class="progress-label">Feature</span>
+                            <span>${item.feature}</span>
+                          </div>
+                        </article>
+                      `,
+                    )
+                    .join("")}
+                </div>`
+              : `<div class="progress-empty">No item in this stage yet.</div>`
+          }
+        </section>
+      `,
     )
     .join("");
 }
 
-function getSelectedMarket() {
-  return marketData.find((item) => item.market === state.selectedMarket) ?? marketData[1];
+function getCurrentDataset() {
+  return productDatasets[state.selectedProduct] ?? productDatasets.SPL;
 }
 
-function enterRate(item) {
-  return ratio(item.enterUploadPage, item.viewEntrance);
+function getSelectedRecord() {
+  return getCurrentDataset().find((item) => item.market === state.selectedMarket) ?? getCurrentDataset()[0];
 }
 
-function submitRate(item) {
-  return ratio(item.submitDoc, item.enterUploadPage);
+function getCurrentProductDefinition() {
+  return productDefinitions[state.selectedProduct] ?? productDefinitions.SPL;
 }
 
-function clickToUploadRate(item) {
-  return ratio(item.enterUploadPage, item.entryClick);
+function getCurrentStepDefinition() {
+  return getCurrentProductDefinition().steps.find((item) => item.key === state.selectedStep) ?? getCurrentProductDefinition().steps[0];
 }
 
-function approvalRate(item) {
-  return ratio(item.riskApproved, item.submitDoc);
-}
-
-function e2eRate(item) {
-  return ratio(item.limitIncreaseSuccess, item.viewEntrance);
-}
-
-function opsApprovalRate(item) {
-  return ratio(item.opsApproved, item.opsScreening);
-}
-
-function uwApprovalRate(item) {
-  return ratio(item.riskApproved, item.riskPolicy);
-}
-
-function successRate(item) {
-  return ratio(item.limitIncreaseSuccess, item.riskPolicy);
+function ensureSelectedStep() {
+  const steps = getCurrentProductDefinition().steps;
+  if (!steps.some((step) => step.key === state.selectedStep)) {
+    state.selectedStep = steps[0].key;
+  }
 }
 
 function ratio(a, b) {

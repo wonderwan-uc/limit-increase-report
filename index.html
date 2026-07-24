@@ -23,8 +23,8 @@
           <h1>Limit Increase Upload Journey</h1>
           <p class="hero-text">
             This page maps the full journey from entry exposure to document submission,
-            risk review, and final limit increase, using real market data from
-            2026-04-01 to 2026-06-20.
+            screening, and final limit increase, using real market data from
+            2026-07-01 to 2026-07-15.
           </p>
           <div class="hero-badges">
             <span>Real market data</span>
@@ -40,10 +40,16 @@
             <p class="eyebrow">Daily Report</p>
             <h2>Click any step to inspect the metrics and optimization goal</h2>
           </div>
-          <label class="day-picker">
-            <span>Select market</span>
-            <select id="daySelect"></select>
-          </label>
+          <div class="filter-row">
+            <label class="day-picker">
+              <span>Select market</span>
+              <select id="daySelect"></select>
+            </label>
+            <label class="day-picker">
+              <span>Select product</span>
+              <select id="productSelect"></select>
+            </label>
+          </div>
         </div>
 
         <div id="stepRail" class="step-rail"></div>
@@ -112,24 +118,39 @@
           <div class="table-wrap">
             <table>
               <thead>
-                <tr>
-                  <th>Market</th>
-                  <th>#1 View Entrance</th>
-                  <th>#2 Entry Click</th>
-                  <th>#3 Enter Upload Page</th>
-                  <th>#4 Submit Doc</th>
-                  <th>#5.1 Ops Screening</th>
-                  <th>#6 Risk Policy</th>
-                  <th>#7 Limit Increase Success</th>
-                  <th>Click -> Upload CR</th>
-                  <th>Doc Submit CR</th>
-                  <th>Ops Approval Rate</th>
-                  <th>UW Approval Rate</th>
-                  <th>E2E CR</th>
-                  <th>Note</th>
-                </tr>
+                <tr id="dailyTableHead"></tr>
               </thead>
               <tbody id="dailyTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="full-width-section">
+        <article class="card rollout-card">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">Whitelist & OTA</p>
+              <h2>Rollout Data Record</h2>
+            </div>
+            <div class="rollout-meta">
+              <span>Data Updated</span>
+              <strong id="whitelistUpdatedAt">-</strong>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="rollout-table">
+              <thead>
+                <tr>
+                  <th>Mkt</th>
+                  <th>ID</th>
+                  <th>MY</th>
+                  <th>PH</th>
+                  <th>TH</th>
+                  <th>VN</th>
+                </tr>
+              </thead>
+              <tbody id="whitelistOtaBody"></tbody>
             </table>
           </div>
         </article>
@@ -148,15 +169,15 @@
         </article>
       </section>
 
-      <section class="full-width-section lower-grid">
-        <article class="card talking-card">
+      <section class="full-width-section">
+        <article class="card progress-card">
           <div class="section-head compact">
             <div>
-              <p class="eyebrow">Feature Plan</p>
-              <h2>Feature Plan</h2>
+              <p class="eyebrow">Feature Progress</p>
+              <h2>Feature Progress</h2>
             </div>
           </div>
-          <div id="talkingPoints" class="talking-points"></div>
+          <div id="featureProgress" class="feature-progress"></div>
         </article>
       </section>
     </main>
