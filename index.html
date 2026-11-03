@@ -2,186 +2,152 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Limit Increase Revamp Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Monthly income document and limit increase funnel report by product and market."
+    />
+    <title>Limit Increase Funnel Report</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=20261030-step-trend" />
   </head>
   <body>
-    <div class="bg-orb bg-orb-left"></div>
-    <div class="bg-orb bg-orb-right"></div>
-
     <main class="page-shell">
-      <section class="hero">
+      <header class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">Clickable Product Story</p>
-          <h1>Limit Increase Upload Journey</h1>
-          <p class="hero-text">
-            This page maps the full journey from entry exposure to document submission,
-            screening, and final limit increase, using real market data from
-            2026-07-01 to 2026-07-15.
+          <p class="eyebrow">Monthly performance report</p>
+          <h1>Limit Increase<br /><span>Funnel Overview</span></h1>
+          <p class="hero-description">
+            Follow each product journey from its first entry step through screening and approval.
+            Review monthly volume and conversion by market using the source report data.
           </p>
-          <div class="hero-badges">
-            <span>Real market data</span>
-            <span>Clickable steps</span>
-            <span>Old vs New UI</span>
+          <div class="hero-meta">
+            <span class="meta-dot"></span>
+            <span id="sourceCaption">Source data</span>
+            <a id="sourceLink" href="#" target="_blank" rel="noreferrer">Open source sheet ↗</a>
           </div>
+        </div>
+        <div class="hero-aside" aria-label="Report coverage">
+          <div class="coverage-value">3</div>
+          <div class="coverage-label">monthly reports</div>
+          <div class="coverage-divider"></div>
+          <div class="product-chips">
+            <span>SPL</span>
+            <span>BCL</span>
+            <span>SCL</span>
+          </div>
+          <div class="coverage-label">product funnels</div>
+        </div>
+      </header>
+
+      <section class="filters card" aria-label="Report filters">
+        <div class="filters-intro">
+          <p class="eyebrow">Report view</p>
+          <h2>Choose a month and product</h2>
+        </div>
+        <div class="filter-controls">
+          <label class="filter-field" for="monthSelect">
+            <span>Reporting month</span>
+            <select id="monthSelect"></select>
+          </label>
+          <label class="filter-field" for="productSelect">
+            <span>Product</span>
+            <select id="productSelect"></select>
+          </label>
         </div>
       </section>
 
-      <section class="step-section">
-        <div class="section-head">
+      <section class="summary-section" aria-labelledby="summaryHeading">
+        <div class="section-heading">
           <div>
-            <p class="eyebrow">Daily Report</p>
-            <h2>Click any step to inspect the metrics and optimization goal</h2>
+            <p class="eyebrow">At a glance</p>
+            <h2 id="summaryHeading">Monthly funnel summary</h2>
           </div>
-          <div class="filter-row">
-            <label class="day-picker">
-              <span>Select market</span>
-              <select id="daySelect"></select>
-            </label>
-            <label class="day-picker">
-              <span>Select product</span>
-              <select id="productSelect"></select>
-            </label>
-          </div>
+          <span class="section-context" id="summaryContext"></span>
         </div>
-
-        <div id="stepRail" class="step-rail"></div>
+        <div class="kpi-grid" id="kpiGrid"></div>
       </section>
 
-      <section class="dashboard-grid">
-        <article class="card analytics-card">
-          <div class="section-head compact">
-            <div>
-              <p class="eyebrow">Funnel Snapshot</p>
-              <h2 id="selectedDayTitle">Real Conversion</h2>
-            </div>
-            <div class="legend-row">
-              <span class="legend-dot legend-current"></span>
-              <span>Current</span>
-            </div>
+      <section class="card trend-section" aria-labelledby="trendHeading">
+        <div class="section-heading trend-heading">
+          <div>
+            <p class="eyebrow">Three-month comparison</p>
+            <h2 id="trendHeading">Step volume across months</h2>
+            <p class="section-description">
+              Product follows the report filter above. Choose a market to compare July, August, and September.
+            </p>
           </div>
-
-          <div id="kpiGrid" class="kpi-grid"></div>
-          <div id="funnelBars" class="funnel-bars"></div>
-        </article>
-
-        <article class="card detail-card">
-          <div class="section-head compact">
-            <div>
-              <p class="eyebrow">Why It Matters</p>
-              <h2 id="detailTitle">Entry Click</h2>
-            </div>
-          </div>
-          <div id="detailVisual" class="detail-visual"></div>
-        </article>
+          <label class="filter-field trend-market-field" for="chartMarketSelect">
+            <span>Market</span>
+            <select id="chartMarketSelect"></select>
+          </label>
+        </div>
+        <div class="trend-meta">
+          <span id="trendSelection" class="trend-selection"></span>
+          <span class="trend-scale-note">Bar heights are scaled within each step</span>
+        </div>
+        <div id="trendLegend" class="trend-legend" aria-label="Month legend"></div>
+        <div class="chart-scroll">
+          <svg id="stepTrendChart" class="trend-chart" role="img" aria-label="Three-month comparison of step volumes"></svg>
+        </div>
+        <div class="trend-table-wrap">
+          <table class="trend-table">
+            <thead id="trendTableHead"></thead>
+            <tbody id="trendTableBody"></tbody>
+          </table>
+        </div>
+        <div class="table-notes trend-notes">
+          <span class="note-mark">i</span>
+          <p>Exact counts are listed below the chart. A dash means the source month has no value for that market; zero values are preserved.</p>
+        </div>
       </section>
 
-      <section class="full-width-section">
-        <article class="card reject-card">
-          <div class="section-head compact">
-            <div>
-              <p class="eyebrow">Reject Breakdown</p>
-              <h2>Reject Reason Distribution by Market</h2>
-            </div>
+      <section class="card funnel-section" aria-labelledby="funnelHeading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Step sequence</p>
+            <h2 id="funnelHeading">Volume by funnel step</h2>
           </div>
-          <div id="rejectReasonGrid" class="reject-reason-grid"></div>
-        </article>
+          <span class="section-context" id="funnelContext"></span>
+        </div>
+        <div id="stepGrid" class="step-grid"></div>
       </section>
 
-      <section class="full-width-section">
-        <article class="card chart-card">
-          <div class="section-head compact">
-            <div>
-              <p class="eyebrow">Market Trend</p>
-              <h2>Users by Step and Market</h2>
-            </div>
+      <section class="card data-section" aria-labelledby="dataHeading">
+        <div class="section-heading table-heading">
+          <div>
+            <p class="eyebrow">Market breakdown</p>
+            <h2 id="dataHeading">Step detail by market</h2>
+            <p class="section-description" id="dataDescription"></p>
           </div>
-          <div id="stepChart" class="step-chart"></div>
-        </article>
+          <span class="source-tab" id="sourceTab"></span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead id="stepTableHead"></thead>
+            <tbody id="stepTableBody"></tbody>
+          </table>
+        </div>
+        <div class="table-notes">
+          <span class="note-mark">i</span>
+          <p>
+            Counts follow the selected month tab. Conversion rates are calculated from the displayed
+            counts. A dash means the source tab has no value for that market; zero values are kept as
+            reported.
+          </p>
+        </div>
       </section>
 
-      <section class="full-width-section">
-        <article class="card table-card">
-          <div class="section-head compact">
-            <div>
-              <p class="eyebrow">Market Breakdown</p>
-              <h2>Market Data Table</h2>
-            </div>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr id="dailyTableHead"></tr>
-              </thead>
-              <tbody id="dailyTableBody"></tbody>
-            </table>
-          </div>
-        </article>
-      </section>
-
-      <section class="full-width-section">
-        <article class="card rollout-card">
-          <div class="section-head compact">
-            <div>
-              <p class="eyebrow">Whitelist & OTA</p>
-              <h2>Rollout Data Record</h2>
-            </div>
-            <div class="rollout-meta">
-              <span>Data Updated</span>
-              <strong id="whitelistUpdatedAt">-</strong>
-            </div>
-          </div>
-          <div class="table-wrap">
-            <table class="rollout-table">
-              <thead>
-                <tr>
-                  <th>Mkt</th>
-                  <th>ID</th>
-                  <th>MY</th>
-                  <th>PH</th>
-                  <th>TH</th>
-                  <th>VN</th>
-                </tr>
-              </thead>
-              <tbody id="whitelistOtaBody"></tbody>
-            </table>
-          </div>
-        </article>
-      </section>
-
-      <section class="full-width-section">
-        <article class="card ui-card">
-          <div class="section-head compact">
-            <div>
-              <p class="eyebrow">UI Compare</p>
-              <h2>Old UI vs New UI</h2>
-            </div>
-          </div>
-
-          <div id="uiShowcase" class="ui-showcase dual-ui-showcase"></div>
-        </article>
-      </section>
-
-      <section class="full-width-section">
-        <article class="card progress-card">
-          <div class="section-head compact">
-            <div>
-              <p class="eyebrow">Feature Progress</p>
-              <h2>Feature Progress</h2>
-            </div>
-          </div>
-          <div id="featureProgress" class="feature-progress"></div>
-        </article>
-      </section>
+      <footer class="page-footer">
+        <span>Income Document Project Analysis</span>
+        <span id="footerPeriod">Monthly report</span>
+      </footer>
     </main>
-
-    <script src="./app.js"></script>
+    <script src="./app.js?v=20261030-step-trend"></script>
   </body>
 </html>

@@ -1,1220 +1,672 @@
-const reportPeriod = "2026-07-01 ~ 2026-07-15";
+const spreadsheetId = "1sWhyuZ5uYoDs2Im2iZoBnLiBvA6UXCGezAlpsHE8JL8";
+const marketOrder = ["ID", "MY", "PH", "VN", "TH"];
 
-const marketNotes = {
-  ID: "ID will be the first region make revamp, will check data later, if CR raise well, we will migrate this revamp to other region.",
-  MY: "We already developed cross-product sharing, but not roll out yet, we will remove 2W from sharing then roll out sharing.",
-  PH: "PH just raised FRF to make enhancement to improve CR, we will check in late Q3.",
-  VN: "VN's whitelist volume is very low, so we do not have enough sample to check CR.",
-  TH: "TH just added whitelist in June, traffic is increasing. TH's FE is similar to other regions but data is much better (maybe bankstatement is easier to get in TH).",
-};
-
-const productDatasets = {
+const fields = {
   SPL: [
-    {
-      market: "ID",
-      viewEntrance: 3525131,
-      entryClick: 282071,
-      enterUploadPage: 55329,
-      submitDoc: 1425,
-      opsScreening: 1082,
-      opsApproved: 285,
-      opsRejected: 797,
-      modelScreening: 343,
-      modelPassed: 0,
-      modelRejected: 343,
-      riskPolicy: 285,
-      riskApproved: 147,
-      riskRejected: 138,
-      limitIncreaseSuccess: 147,
-    },
-    {
-      market: "MY",
-      viewEntrance: 3960809,
-      entryClick: 85108,
-      enterUploadPage: 81940,
-      submitDoc: 2113,
-      opsScreening: 2113,
-      opsApproved: 1609,
-      opsRejected: 504,
-      modelScreening: 0,
-      modelPassed: 0,
-      modelRejected: 0,
-      riskPolicy: 1609,
-      riskApproved: 1020,
-      riskRejected: 589,
-      limitIncreaseSuccess: 1020,
-    },
-    {
-      market: "PH",
-      viewEntrance: 42982,
-      entryClick: 2432,
-      enterUploadPage: 2385,
-      submitDoc: 275,
-      opsScreening: 127,
-      opsApproved: 72,
-      opsRejected: 55,
-      modelScreening: 148,
-      modelPassed: 0,
-      modelRejected: 148,
-      riskPolicy: 72,
-      riskApproved: 32,
-      riskRejected: 40,
-      limitIncreaseSuccess: 32,
-    },
-    {
-      market: "VN",
-      viewEntrance: 85586,
-      entryClick: 3440,
-      enterUploadPage: 28095,
-      submitDoc: 385,
-      opsScreening: 385,
-      opsApproved: 171,
-      opsRejected: 214,
-      modelScreening: 0,
-      modelPassed: 0,
-      modelRejected: 0,
-      riskPolicy: 145,
-      riskApproved: 97,
-      riskRejected: 48,
-      limitIncreaseSuccess: 97,
-    },
-    {
-      market: "TH",
-      viewEntrance: 5156678,
-      entryClick: 482681,
-      enterUploadPage: 441986,
-      submitDoc: 48344,
-      opsScreening: 37761,
-      opsApproved: 35695,
-      opsRejected: 2066,
-      modelScreening: 10583,
-      modelPassed: 7457,
-      modelRejected: 3126,
-      riskPolicy: 43152,
-      riskApproved: 43009,
-      riskRejected: 143,
-      limitIncreaseSuccess: 43009,
-    },
+    "viewEntrance",
+    "entryClick",
+    "enterUploadPage",
+    "submitDoc",
+    "opsScreening",
+    "opsApproved",
+    "opsRejected",
+    "modelScreening",
+    "modelPassed",
+    "modelRejected",
+    "riskPolicy",
+    "riskApproved",
+    "riskRejected",
+    "limitIncreaseSuccess",
   ],
   BCL: [
-    {
-      market: "ID",
-      viewEntrance: null,
-      entryClick: null,
-      enterUploadPage: null,
-      submitDoc: 2208,
-      opsScreening: 1677,
-      opsApproved: 358,
-      opsRejected: 1319,
-      modelScreening: 531,
-      modelPassed: 0,
-      modelRejected: 531,
-      riskPolicy: 358,
-      riskApproved: 152,
-      riskRejected: 206,
-      limitIncreaseSuccess: 152,
-      noteOverride: "View / click / upload data error, BI is checking.",
-    },
-    {
-      market: "MY",
-      viewEntrance: null,
-      entryClick: null,
-      enterUploadPage: null,
-      submitDoc: 3,
-      opsScreening: 3,
-      opsApproved: 2,
-      opsRejected: 1,
-      modelScreening: 0,
-      modelPassed: 0,
-      modelRejected: 0,
-      riskPolicy: 2,
-      riskApproved: 0,
-      riskRejected: 2,
-      limitIncreaseSuccess: 0,
-    },
-    {
-      market: "PH",
-      viewEntrance: null,
-      entryClick: null,
-      enterUploadPage: null,
-      submitDoc: 658,
-      opsScreening: 338,
-      opsApproved: 231,
-      opsRejected: 107,
-      modelScreening: 320,
-      modelPassed: 0,
-      modelRejected: 320,
-      riskPolicy: 231,
-      riskApproved: 113,
-      riskRejected: 118,
-      limitIncreaseSuccess: 113,
-    },
-    {
-      market: "VN",
-      viewEntrance: null,
-      entryClick: null,
-      enterUploadPage: null,
-      submitDoc: 511,
-      opsScreening: 511,
-      opsApproved: 39,
-      opsRejected: 472,
-      modelScreening: 0,
-      modelPassed: 0,
-      modelRejected: 0,
-      riskPolicy: 39,
-      riskApproved: 26,
-      riskRejected: 13,
-      limitIncreaseSuccess: 26,
-    },
-    {
-      market: "TH",
-      viewEntrance: null,
-      entryClick: null,
-      enterUploadPage: null,
-      submitDoc: 23662,
-      opsScreening: 19602,
-      opsApproved: 18543,
-      opsRejected: 1059,
-      modelScreening: 4060,
-      modelPassed: 2464,
-      modelRejected: 1596,
-      riskPolicy: 21007,
-      riskApproved: 21005,
-      riskRejected: 2,
-      limitIncreaseSuccess: 21005,
-    },
+    "viewEntrance",
+    "entryClick",
+    "enterUploadPage",
+    "submitDoc",
+    "opsScreening",
+    "opsApproved",
+    "opsRejected",
+    "modelScreening",
+    "modelPassed",
+    "modelRejected",
+    "riskPolicy",
+    "riskApproved",
+    "riskRejected",
+    "limitIncreaseSuccess",
   ],
-  SCL: [
-    { market: "ID", invited: 341751, viewed: 63712, started: 37732, submitted: 19921, approved: 9542 },
-    { market: "MY", invited: 21001, viewed: 8833, started: 4864, submitted: 2819, approved: 1935 },
-    { market: "PH", invited: 13463, viewed: 7834, started: 4736, submitted: 2850, approved: 1293 },
-    { market: "VN", invited: 594, viewed: 495, started: 288, submitted: 61, approved: 7 },
-    { market: "TH", invited: 22594, viewed: 3461, started: 1729, submitted: 797, approved: 222 },
-  ],
+  SCL: ["invited", "viewed", "started", "submitted", "approved"],
 };
+
+// Counts are entered in source-sheet step order. Null is used only when a source cell is missing.
+const monthlyData = [
+  {
+    key: "2026-09",
+    label: "September 2026",
+    tab: "Sept 2026",
+    gid: "960508081",
+    products: {
+      SPL: {
+        ID: [295051, 4001, 3367, 89, 39, 15, 24, 50, 0, 50, 15, 8, 7, 8],
+        MY: [202513, 3734, 3560, 463, 463, 334, 129, 0, 0, 0, 334, 208, 126, 208],
+        PH: [41486, 2509, 2461, 91, 47, 25, 22, 44, 0, 44, 25, 21, 3, 21],
+        VN: [4861, 99, 96, 2, 2, 1, 1, 0, 0, 0, 1, 1, 0, 1],
+        TH: [419660, 23971, 20170, 2836, 2267, 2198, 68, 569, 455, 115, 2653, 2130, 523, 2130],
+      },
+      BCL: {
+        ID: [152021, 3265, 2895, 155, 72, 22, 50, 83, 0, 83, 22, 11, 12, 11],
+        PH: [18892, 949, 932, 102, 44, 30, 15, 58, 0, 58, 30, 26, 4, 26],
+        VN: [3463, 114, 113, 4, 4, 2, 2, 0, 0, 0, 2, 1, 1, 1],
+        TH: [68301, 6540, 5847, 2023, 1786, 1741, 45, 237, 145, 92, 1886, 1821, 65, 1821],
+      },
+      SCL: {
+        ID: [352359, 69870, 42290, 22515, 10662],
+        MY: [21498, 10557, 6136, 3688, 2595],
+        PH: [14296, 8485, 5237, 3209, 1441],
+        VN: [597, 522, 337, 96, 28],
+        TH: [18781, 4498, 2365, 1077, 222],
+      },
+    },
+  },
+  {
+    key: "2026-08",
+    label: "August 2026",
+    tab: "August 2026",
+    gid: "467070787",
+    products: {
+      SPL: {
+        ID: [296695, 4011, 3382, 76, 51, 14, 37, 25, 0, 25, 14, 8, 6, 8],
+        MY: [208097, 3782, 3632, 276, 276, 189, 87, 0, 0, 0, 188, 121, 67, 121],
+        PH: [42100, 2520, 2477, 242, 130, 86, 44, 112, 0, 112, 85, 54, 31, 54],
+        VN: [5027, 100, 98, 2, 2, 1, 1, 0, 0, 0, 1, 1, 0, 1],
+        TH: [426312, 24195, 20545, 1830, 1482, 1394, 88, 348, 179, 169, 1573, 1556, 17, 1556],
+      },
+      BCL: {
+        ID: [149063, 3511, 3138, 95, 65, 15, 50, 30, 0, 30, 16, 8, 8, 8],
+        PH: [24832, 1706, 2943, 402, 229, 155, 74, 173, 0, 173, 155, 123, 32, 123],
+        VN: [3490, 40, 130, 6, 6, 2, 4, 0, 0, 0, 1, 1, 0, 1],
+        TH: [83380, 1439, 6130, 1703, 1490, 1436, 54, 213, 73, 140, 1509, 1509, 0, 1509],
+      },
+      SCL: {
+        ID: [340177, 66410, 39857, 21088, 10223],
+        MY: [21145, 9640, 5461, 3202, 2236],
+        PH: [13754, 8149, 4992, 3030, 1378],
+        VN: [594, 509, 322, 79, 7],
+        TH: [22592, 3766, 1936, 916, 222],
+      },
+    },
+  },
+  {
+    key: "2026-07",
+    label: "July 2026",
+    tab: "July 2026",
+    gid: "2001198598",
+    products: {
+      SPL: {
+        ID: [231497, 3783, 3498, 85, 63, 16, 47, 20, 0, 20, 16, 8, 8, 8],
+        MY: [242520, 4829, 4626, 260, 244, 156, 88, 0, 0, 0, 157, 101, 56, 101],
+        PH: [20409, 1217, 1196, 116, 42, 30, 12, 78, 0, 78, 30, 27, 3, 27],
+        VN: [4901, 165, 986, 18, 14, 6, 8, 0, 0, 0, 5, 3, 2, 3],
+        TH: [307206, 22799, 20487, 2026, 1504, 1428, 76, 471, 284, 187, 1712, 1710, 2, 1710],
+      },
+      BCL: {
+        ID: [141057, 5711, 3367, 131, 98, 20, 78, 31, 0, 31, 20, 9, 11, 9],
+        MY: [1445, 1442, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        PH: [11648, 145, 1832, 270, 114, 86, 28, 164, 0, 164, 86, 79, 7, 79],
+        VN: [3391, 29, 143, 6, 6, 2, 4, 0, 0, 0, 2, 1, 1, 1],
+        TH: [85591, 701, 6385, 1880, 1554, 1501, 53, 350, 120, 230, 1622, 1622, 0, 1622],
+      },
+      SCL: {
+        ID: [341751, 63712, 37732, 19921, 9542],
+        MY: [21001, 8833, 4864, 2819, 1935],
+        PH: [13463, 7834, 4736, 2850, 1293],
+        VN: [594, 495, 288, 61, 7],
+        TH: [22594, 3461, 1729, 797, 222],
+      },
+    },
+  },
+];
 
 const productDefinitions = {
   SPL: {
-    label: "SPL",
-    titleLabel: "SPL Funnel",
-    steps: [
-      { key: "viewEntrance", stepLabel: "STEP 1", label: "View Entrance" },
-      { key: "entryClick", stepLabel: "STEP 2", label: "Entry Click" },
-      { key: "enterUploadPage", stepLabel: "STEP 3", label: "Upload Page Visit" },
-      { key: "submitDoc", stepLabel: "STEP 4", label: "Document Submitted" },
-      { key: "opsScreening", stepLabel: "STEP 5.1", label: "Ops Screening" },
-      { key: "modelScreening", stepLabel: "STEP 5.2", label: "Model Screening" },
-      { key: "riskPolicy", stepLabel: "STEP 6", label: "Risk Policy" },
-      { key: "limitIncreaseSuccess", stepLabel: "STEP 7", label: "Limit Increase Success" },
+    description: "SPL funnel with operations and model screening branches.",
+    summary: [
+      { label: "#1 View Entrance", key: "viewEntrance", formula: "Total across reported markets" },
+      { label: "#4 Submit Doc", key: "submitDoc", formula: "Total across reported markets" },
+      { label: "#7 Limit Increase Success", key: "limitIncreaseSuccess", formula: "Total across reported markets" },
+      {
+        label: "End-to-end conversion",
+        numerator: "limitIncreaseSuccess",
+        denominator: "viewEntrance",
+        digits: 3,
+        formula: "#7 ÷ #1",
+      },
     ],
-    kpis: [
-      { label: "View -> Click CR", delta: "#2 / #1", digits: 2, calc: (item) => ratio(item.entryClick, item.viewEntrance) },
-      { label: "Click -> Upload Page CR", delta: "#3 / #2", digits: 2, calc: (item) => ratio(item.enterUploadPage, item.entryClick) },
-      { label: "Doc Submit CR", delta: "#4 / #3", digits: 2, calc: (item) => ratio(item.submitDoc, item.enterUploadPage) },
-      { label: "Ops Approval Rate", delta: "#5.1 pass / #5.1", digits: 2, calc: (item) => ratio(item.opsApproved, item.opsScreening) },
-      { label: "Model Pass Rate", delta: "#5.2 pass / #5.2", digits: 2, calc: (item) => ratio(item.modelPassed, item.modelScreening) },
-      { label: "UW Approval Rate", delta: "#7 / #6", digits: 2, calc: (item) => ratio(item.limitIncreaseSuccess, item.riskPolicy) },
+    funnel: [
+      { step: "#1", label: "View Entrance", key: "viewEntrance" },
+      { step: "#2", label: "Click Entrance", key: "entryClick", from: "viewEntrance", rateLabel: "#2 / #1" },
+      { step: "#3", label: "Enter Upload Page", key: "enterUploadPage", from: "entryClick", rateLabel: "#3 / #2" },
+      { step: "#4", label: "Submit Doc", key: "submitDoc", from: "enterUploadPage", rateLabel: "#4 / #3" },
+      { step: "#5.1", label: "Ops Screening", key: "opsScreening", from: "submitDoc", rateLabel: "#5.1 / #4" },
+      { step: "#5.2", label: "Model Screening", key: "modelScreening", from: "submitDoc", rateLabel: "#5.2 / #4" },
+      { step: "#6", label: "Risk Policy", key: "riskPolicy", from: "submitDoc", rateLabel: "#6 / #4" },
+      { step: "#7", label: "Limit Increase Success", key: "limitIncreaseSuccess", from: "riskPolicy", rateLabel: "#7 / #6" },
     ],
-    bars: [
-      { label: "View -> Click", leftLabel: "View", leftKey: "viewEntrance", rightLabel: "Click", rightKey: "entryClick" },
-      { label: "Click -> Upload Page", leftLabel: "Click", leftKey: "entryClick", rightLabel: "Visit", rightKey: "enterUploadPage" },
-      { label: "Upload Page -> Submit", leftLabel: "Visit", leftKey: "enterUploadPage", rightLabel: "Submit", rightKey: "submitDoc" },
-      { label: "Submit -> Ops Screening", leftLabel: "Submit", leftKey: "submitDoc", rightLabel: "Ops", rightKey: "opsScreening" },
-      { label: "Submit -> Model Screening", leftLabel: "Submit", leftKey: "submitDoc", rightLabel: "Model", rightKey: "modelScreening" },
-      { label: "Ops Screening -> Pass", leftLabel: "Ops", leftKey: "opsScreening", rightLabel: "Pass", rightKey: "opsApproved" },
-      { label: "Model Screening -> Pass", leftLabel: "Model", leftKey: "modelScreening", rightLabel: "Pass", rightKey: "modelPassed" },
-      { label: "Risk Policy -> Success", leftLabel: "Risk", leftKey: "riskPolicy", rightLabel: "Success", rightKey: "limitIncreaseSuccess" },
-      { label: "View -> Success", leftLabel: "View", leftKey: "viewEntrance", rightLabel: "Success", rightKey: "limitIncreaseSuccess", digits: 3 },
-    ],
-    tableColumns: [
-      { key: "market", label: "Market", type: "text" },
-      { key: "viewEntrance", label: "#1 View Entrance" },
-      { key: "entryClick", label: "#2 Click Entrance" },
-      { key: "enterUploadPage", label: "#3 Enter Upload Page" },
-      { key: "submitDoc", label: "#4 Submit Doc" },
-      { key: "opsScreening", label: "#5.1 Ops Screening" },
-      { key: "modelScreening", label: "#5.2 Model Screening" },
-      { key: "riskPolicy", label: "#6 Risk Policy" },
-      { key: "limitIncreaseSuccess", label: "#7 Limit Increase Success" },
-      { key: "viewToClickCr", label: "View -> Click CR", type: "percent", digits: 2, calc: (item) => ratio(item.entryClick, item.viewEntrance) },
-      { key: "clickToUploadCr", label: "Click -> Upload CR", type: "percent", digits: 2, calc: (item) => ratio(item.enterUploadPage, item.entryClick) },
-      { key: "submitCr", label: "Submit CR", type: "percent", digits: 2, calc: (item) => ratio(item.submitDoc, item.enterUploadPage) },
-      { key: "opsApprovalRate", label: "Ops Approval Rate", type: "percent", digits: 2, calc: (item) => ratio(item.opsApproved, item.opsScreening) },
-      { key: "modelPassRate", label: "Model Pass Rate", type: "percent", digits: 2, calc: (item) => ratio(item.modelPassed, item.modelScreening) },
-      { key: "uwApprovalRate", label: "UW Approval Rate", type: "percent", digits: 2, calc: (item) => ratio(item.limitIncreaseSuccess, item.riskPolicy) },
-      { key: "e2eCr", label: "E2E CR", type: "percent", digits: 3, calc: (item) => ratio(item.limitIncreaseSuccess, item.viewEntrance) },
-      { key: "note", label: "Note", type: "note" },
-    ],
-    chartSteps: [
-      { key: "viewEntrance", label: "Step 1", fullLabel: "View Entrance" },
-      { key: "entryClick", label: "Step 2", fullLabel: "Entry Click" },
-      { key: "enterUploadPage", label: "Step 3", fullLabel: "Upload Page" },
-      { key: "submitDoc", label: "Step 4", fullLabel: "Submit Doc" },
-      { key: "opsScreening", label: "Step 5.1", fullLabel: "Ops Screening" },
-      { key: "modelScreening", label: "Step 5.2", fullLabel: "Model Screening" },
-      { key: "riskPolicy", label: "Step 6", fullLabel: "Risk Policy" },
-      { key: "limitIncreaseSuccess", label: "Step 7", fullLabel: "Success" },
+    rows: [
+      { step: "#1", label: "View Entrance", key: "viewEntrance" },
+      { step: "#2", label: "Click Entrance", key: "entryClick", rateFrom: "viewEntrance" },
+      { step: "#3", label: "Enter Upload Page", key: "enterUploadPage", rateFrom: "entryClick" },
+      { step: "#4", label: "Submit Doc", key: "submitDoc", rateFrom: "enterUploadPage" },
+      {
+        step: "#5.1",
+        label: "Ops Screening",
+        key: "opsScreening",
+        rateFrom: "submitDoc",
+        children: [
+          { label: "Approve", key: "opsApproved", rateFrom: "opsScreening" },
+          { label: "Reject", key: "opsRejected", rateFrom: "opsScreening" },
+        ],
+      },
+      {
+        step: "#5.2",
+        label: "Model Screening",
+        key: "modelScreening",
+        rateFrom: "submitDoc",
+        children: [
+          { label: "Pass", key: "modelPassed", rateFrom: "modelScreening" },
+          { label: "Reject", key: "modelRejected", rateFrom: "modelScreening" },
+        ],
+      },
+      {
+        step: "#6",
+        label: "Risk Policy",
+        key: "riskPolicy",
+        rateFrom: "submitDoc",
+        children: [
+          { label: "Approve", key: "riskApproved", rateFrom: "riskPolicy" },
+          { label: "Reject", key: "riskRejected", rateFrom: "riskPolicy" },
+        ],
+      },
+      { step: "#7", label: "Limit Increase Success", key: "limitIncreaseSuccess", rateFrom: "riskPolicy" },
     ],
   },
   BCL: {
-    label: "BCL",
-    titleLabel: "BCL Funnel",
-    steps: [
-      { key: "submitDoc", stepLabel: "STEP 4", label: "Document Submitted" },
-      { key: "opsScreening", stepLabel: "STEP 5.1", label: "Ops Screening" },
-      { key: "modelScreening", stepLabel: "STEP 5.2", label: "Model Screening" },
-      { key: "riskPolicy", stepLabel: "STEP 6", label: "Risk Policy" },
-      { key: "limitIncreaseSuccess", stepLabel: "STEP 7", label: "Limit Increase Success" },
+    description: "BCL funnel with operations and model screening branches.",
+    summary: [
+      { label: "#1 View Entrance", key: "viewEntrance", formula: "Total across reported markets" },
+      { label: "#4 Submit Doc", key: "submitDoc", formula: "Total across reported markets" },
+      { label: "#7 Limit Increase Success", key: "limitIncreaseSuccess", formula: "Total across reported markets" },
+      {
+        label: "End-to-end conversion",
+        numerator: "limitIncreaseSuccess",
+        denominator: "viewEntrance",
+        digits: 3,
+        formula: "#7 ÷ #1",
+      },
     ],
-    kpis: [
-      { label: "Submit -> Ops Screening", delta: "#5.1 / #4", digits: 2, calc: (item) => ratio(item.opsScreening, item.submitDoc) },
-      { label: "Submit -> Model Screening", delta: "#5.2 / #4", digits: 2, calc: (item) => ratio(item.modelScreening, item.submitDoc) },
-      { label: "Ops Approval Rate", delta: "#5.1 pass / #5.1", digits: 2, calc: (item) => ratio(item.opsApproved, item.opsScreening) },
-      { label: "Model Pass Rate", delta: "#5.2 pass / #5.2", digits: 2, calc: (item) => ratio(item.modelPassed, item.modelScreening) },
-      { label: "UW Approval Rate", delta: "#7 / #6", digits: 2, calc: (item) => ratio(item.limitIncreaseSuccess, item.riskPolicy) },
+    funnel: [
+      { step: "#1", label: "View Entrance", key: "viewEntrance" },
+      { step: "#2", label: "Click Entrance", key: "entryClick", from: "viewEntrance", rateLabel: "#2 / #1" },
+      { step: "#3", label: "Enter Upload Page", key: "enterUploadPage", from: "entryClick", rateLabel: "#3 / #2" },
+      { step: "#4", label: "Submit Doc", key: "submitDoc", from: "enterUploadPage", rateLabel: "#4 / #3" },
+      { step: "#5.1", label: "Ops Screening", key: "opsScreening", from: "submitDoc", rateLabel: "#5.1 / #4" },
+      { step: "#5.2", label: "Model Screening", key: "modelScreening", from: "submitDoc", rateLabel: "#5.2 / #4" },
+      { step: "#6", label: "Risk Policy", key: "riskPolicy", from: "submitDoc", rateLabel: "#6 / #4" },
+      { step: "#7", label: "Limit Increase Success", key: "limitIncreaseSuccess", from: "riskPolicy", rateLabel: "#7 / #6" },
     ],
-    bars: [
-      { label: "Submit -> Ops Screening", leftLabel: "Submit", leftKey: "submitDoc", rightLabel: "Ops", rightKey: "opsScreening" },
-      { label: "Submit -> Model Screening", leftLabel: "Submit", leftKey: "submitDoc", rightLabel: "Model", rightKey: "modelScreening" },
-      { label: "Ops Screening -> Pass", leftLabel: "Ops", leftKey: "opsScreening", rightLabel: "Pass", rightKey: "opsApproved" },
-      { label: "Model Screening -> Pass", leftLabel: "Model", leftKey: "modelScreening", rightLabel: "Pass", rightKey: "modelPassed" },
-      { label: "Risk Policy -> Success", leftLabel: "Risk", leftKey: "riskPolicy", rightLabel: "Success", rightKey: "limitIncreaseSuccess" },
-    ],
-    tableColumns: [
-      { key: "market", label: "Market", type: "text" },
-      { key: "submitDoc", label: "#4 Submit Doc" },
-      { key: "opsScreening", label: "#5.1 Ops Screening" },
-      { key: "modelScreening", label: "#5.2 Model Screening" },
-      { key: "riskPolicy", label: "#6 Risk Policy" },
-      { key: "limitIncreaseSuccess", label: "#7 Limit Increase Success" },
-      { key: "submitToOpsCr", label: "Submit -> Ops CR", type: "percent", digits: 2, calc: (item) => ratio(item.opsScreening, item.submitDoc) },
-      { key: "submitToModelCr", label: "Submit -> Model CR", type: "percent", digits: 2, calc: (item) => ratio(item.modelScreening, item.submitDoc) },
-      { key: "opsApprovalRate", label: "Ops Approval Rate", type: "percent", digits: 2, calc: (item) => ratio(item.opsApproved, item.opsScreening) },
-      { key: "modelPassRate", label: "Model Pass Rate", type: "percent", digits: 2, calc: (item) => ratio(item.modelPassed, item.modelScreening) },
-      { key: "uwApprovalRate", label: "UW Approval Rate", type: "percent", digits: 2, calc: (item) => ratio(item.limitIncreaseSuccess, item.riskPolicy) },
-      { key: "note", label: "Note", type: "note" },
-    ],
-    chartSteps: [
-      { key: "submitDoc", label: "Step 4", fullLabel: "Submit Doc" },
-      { key: "opsScreening", label: "Step 5.1", fullLabel: "Ops Screening" },
-      { key: "modelScreening", label: "Step 5.2", fullLabel: "Model Screening" },
-      { key: "riskPolicy", label: "Step 6", fullLabel: "Risk Policy" },
-      { key: "limitIncreaseSuccess", label: "Step 7", fullLabel: "Success" },
+    rows: [
+      { step: "#1", label: "View Entrance", key: "viewEntrance" },
+      { step: "#2", label: "Click Entrance", key: "entryClick", rateFrom: "viewEntrance" },
+      { step: "#3", label: "Enter Upload Page", key: "enterUploadPage", rateFrom: "entryClick" },
+      { step: "#4", label: "Submit Doc", key: "submitDoc", rateFrom: "enterUploadPage" },
+      {
+        step: "#5.1",
+        label: "Ops Screening",
+        key: "opsScreening",
+        rateFrom: "submitDoc",
+        children: [
+          { label: "Approve", key: "opsApproved", rateFrom: "opsScreening" },
+          { label: "Reject", key: "opsRejected", rateFrom: "opsScreening" },
+        ],
+      },
+      {
+        step: "#5.2",
+        label: "Model Screening",
+        key: "modelScreening",
+        rateFrom: "submitDoc",
+        children: [
+          { label: "Pass", key: "modelPassed", rateFrom: "modelScreening" },
+          { label: "Reject", key: "modelRejected", rateFrom: "modelScreening" },
+        ],
+      },
+      {
+        step: "#6",
+        label: "Risk Policy",
+        key: "riskPolicy",
+        rateFrom: "submitDoc",
+        children: [
+          { label: "Approve", key: "riskApproved", rateFrom: "riskPolicy" },
+          { label: "Reject", key: "riskRejected", rateFrom: "riskPolicy" },
+        ],
+      },
+      { step: "#7", label: "Limit Increase Success", key: "limitIncreaseSuccess", rateFrom: "riskPolicy" },
     ],
   },
   SCL: {
-    label: "SCL",
-    titleLabel: "SCL Funnel",
-    steps: [
-      { key: "invited", stepLabel: "STEP 1", label: "Invited" },
-      { key: "viewed", stepLabel: "STEP 2", label: "Viewed" },
-      { key: "started", stepLabel: "STEP 3", label: "Started" },
-      { key: "submitted", stepLabel: "STEP 4", label: "Submitted" },
-      { key: "approved", stepLabel: "STEP 5", label: "Approved" },
+    description: "Five-step invitation-to-approval funnel.",
+    summary: [
+      { label: "#1 Invited", key: "invited", formula: "Total across reported markets" },
+      { label: "#4 Submitted", key: "submitted", formula: "Total across reported markets" },
+      { label: "#5 Approved", key: "approved", formula: "Total across reported markets" },
+      { label: "End-to-end conversion", numerator: "approved", denominator: "invited", digits: 2, formula: "#5 ÷ #1" },
     ],
-    kpis: [
-      { label: "Invite -> View CR", delta: "#2 / #1", digits: 2, calc: (item) => ratio(item.viewed, item.invited) },
-      { label: "View -> Start CR", delta: "#3 / #2", digits: 2, calc: (item) => ratio(item.started, item.viewed) },
-      { label: "Start -> Submit CR", delta: "#4 / #3", digits: 2, calc: (item) => ratio(item.submitted, item.started) },
-      { label: "Approval Rate", delta: "#5 / #4", digits: 2, calc: (item) => ratio(item.approved, item.submitted) },
-      { label: "E2E CR", delta: "#5 / #1", digits: 3, calc: (item) => ratio(item.approved, item.invited) },
+    funnel: [
+      { step: "#1", label: "Invited", key: "invited" },
+      { step: "#2", label: "Viewed", key: "viewed", from: "invited", rateLabel: "#2 / #1" },
+      { step: "#3", label: "Started", key: "started", from: "viewed", rateLabel: "#3 / #2" },
+      { step: "#4", label: "Submitted", key: "submitted", from: "started", rateLabel: "#4 / #3" },
+      { step: "#5", label: "Approved", key: "approved", from: "submitted", rateLabel: "#5 / #4" },
     ],
-    bars: [
-      { label: "Invited -> Viewed", leftLabel: "Invited", leftKey: "invited", rightLabel: "Viewed", rightKey: "viewed" },
-      { label: "Viewed -> Started", leftLabel: "Viewed", leftKey: "viewed", rightLabel: "Started", rightKey: "started" },
-      { label: "Started -> Submitted", leftLabel: "Started", leftKey: "started", rightLabel: "Submitted", rightKey: "submitted" },
-      { label: "Submitted -> Approved", leftLabel: "Submitted", leftKey: "submitted", rightLabel: "Approved", rightKey: "approved" },
-      { label: "Invited -> Approved", leftLabel: "Invited", leftKey: "invited", rightLabel: "Approved", rightKey: "approved", digits: 3 },
-    ],
-    tableColumns: [
-      { key: "market", label: "Market", type: "text" },
-      { key: "invited", label: "#1 Invited" },
-      { key: "viewed", label: "#2 Viewed" },
-      { key: "started", label: "#3 Started" },
-      { key: "submitted", label: "#4 Submitted" },
-      { key: "approved", label: "#5 Approved" },
-      { key: "inviteToViewCr", label: "Invite -> View CR", type: "percent", digits: 2, calc: (item) => ratio(item.viewed, item.invited) },
-      { key: "viewToStartCr", label: "View -> Start CR", type: "percent", digits: 2, calc: (item) => ratio(item.started, item.viewed) },
-      { key: "startToSubmitCr", label: "Start -> Submit CR", type: "percent", digits: 2, calc: (item) => ratio(item.submitted, item.started) },
-      { key: "approvalRate", label: "Approval Rate", type: "percent", digits: 2, calc: (item) => ratio(item.approved, item.submitted) },
-      { key: "e2eCr", label: "E2E CR", type: "percent", digits: 3, calc: (item) => ratio(item.approved, item.invited) },
-      { key: "note", label: "Note", type: "note" },
-    ],
-    chartSteps: [
-      { key: "invited", label: "Step 1", fullLabel: "Invited" },
-      { key: "viewed", label: "Step 2", fullLabel: "Viewed" },
-      { key: "started", label: "Step 3", fullLabel: "Started" },
-      { key: "submitted", label: "Step 4", fullLabel: "Submitted" },
-      { key: "approved", label: "Step 5", fullLabel: "Approved" },
+    rows: [
+      { step: "#1", label: "Invited", key: "invited" },
+      { step: "#2", label: "Viewed", key: "viewed", rateFrom: "invited" },
+      { step: "#3", label: "Started", key: "started", rateFrom: "viewed" },
+      { step: "#4", label: "Submitted", key: "submitted", rateFrom: "started" },
+      { step: "#5", label: "Approved", key: "approved", rateFrom: "submitted" },
     ],
   },
 };
 
-const stepDetailDefinitions = {
-  viewEntrance: {
-    summary: "Users first need to discover the limit increase entry before any conversion can happen.",
-    formula: "Tracked as #1 View Entrance.",
-    visual: { src: "./assets/entry-view-spaylater.png", alt: "SPayLater entry surfaces for higher limit discovery" },
-  },
-  entryClick: {
-    summary: "This step reflects whether the entry copy and placement are attractive enough to trigger intent.",
-    formula: "Tracked as #2 Click Entrance.",
-  },
-  enterUploadPage: {
-    summary: "This step shows whether users continue after clicking and successfully land on the upload experience.",
-    formula: "Tracked as #3 Enter Upload Page.",
-    visual: { src: "./assets/upload-page-limit-form.png", alt: "Upload page for higher credit limit documents" },
-  },
-  submitDoc: {
-    summary: "This is the first strong commitment point where the user actually submits documents into the flow.",
-    formula: "Tracked as #4 Submit Doc.",
-    visual: { src: "./assets/document-submitted-under-review.png", alt: "Document submitted and under review state" },
-  },
-  opsScreening: {
-    summary: "Operations screening validates submitted documents before they can move deeper into the review flow.",
-    formula: "Tracked as #5.1 Ops Screening.",
-    visual: { src: "./assets/screening-passed-review-console.png", alt: "Operations screening review console", compact: true },
-  },
-  modelScreening: {
-    summary: "Model screening automatically filters document quality and eligibility after submission.",
-    formula: "Tracked as #5.2 Model Screening.",
-  },
-  riskPolicy: {
-    summary: "Risk policy review decides whether the screened cases are eligible for final limit increase approval.",
-    formula: "Tracked as #6 Risk Policy.",
-  },
-  limitIncreaseSuccess: {
-    summary: "This is the final approved outcome and the end-to-end business result for SPL and BCL.",
-    formula: "Tracked as #7 Limit Increase Success.",
-    visualType: "success-distribution",
-  },
-  invited: {
-    summary: "SCL starts from the invited population rather than an upload funnel entrance.",
-    formula: "Tracked as #1 Invited.",
-  },
-  viewed: {
-    summary: "This step shows how many invited users actually viewed the SCL offer or prompt.",
-    formula: "Tracked as #2 Viewed.",
-  },
-  started: {
-    summary: "This step shows how many users began the SCL flow after viewing it.",
-    formula: "Tracked as #3 Started.",
-  },
-  submitted: {
-    summary: "This step shows how many started users completed the SCL submission.",
-    formula: "Tracked as #4 Submitted.",
-  },
-  approved: {
-    summary: "This is the final approved outcome for the SCL flow.",
-    formula: "Tracked as #5 Approved.",
-  },
+const trendColors = ["#5578b6", "#d39a3d", "#e66e4e"];
+const trendShortNames = {
+  viewEntrance: "View",
+  entryClick: "Click",
+  enterUploadPage: "Upload",
+  submitDoc: "Submit",
+  opsScreening: "Ops screen",
+  opsApproved: "Ops approve",
+  opsRejected: "Ops reject",
+  modelScreening: "Model screen",
+  modelPassed: "Model pass",
+  modelRejected: "Model reject",
+  riskPolicy: "Risk policy",
+  riskApproved: "UW approve",
+  riskRejected: "UW reject",
+  limitIncreaseSuccess: "Success",
+  invited: "Invited",
+  viewed: "Viewed",
+  started: "Started",
+  submitted: "Submitted",
+  approved: "Approved",
 };
-
-const successDistribution = [
-  {
-    market: "ID",
-    color: "#ffb35c",
-    temp: [
-      { range: "(0,100]", value: 90, display: "90%+" },
-      { range: "(100,200]", value: 10, display: "10%" },
-    ],
-    perm: [],
-  },
-  {
-    market: "MY",
-    color: "#ffd166",
-    temp: [
-      { range: "(40,60]", value: 5, display: "5%" },
-      { range: "(60,80]", value: 10, display: "10%" },
-      { range: "(100,500]", value: 50, display: "50%" },
-    ],
-    perm: [
-      { range: "(100,200]", value: 4, display: "4%" },
-      { range: "(200,300]", value: 4, display: "4%" },
-      { range: "(300,400]", value: 3, display: "3%" },
-      { range: "(400,500]", value: 3, display: "3%" },
-      { range: "(500,600]", value: 6, display: "6%" },
-      { range: "(600,700]", value: 15, display: "15%" },
-    ],
-  },
-  {
-    market: "TH",
-    color: "#8ecae6",
-    temp: [{ range: "(60,80]", value: 13, display: "13%" }],
-    perm: [
-      { range: "(0,100]", value: 80, display: "80%" },
-      { range: "(100,200]", value: 2, display: "2%" },
-      { range: "(200,300]", value: 2, display: "2%" },
-      { range: "(300,400]", value: 2, display: "2%" },
-      { range: "(400,500]", value: 1, display: "1%" },
-    ],
-  },
-];
-
-const rejectReasonDistribution = [
-  {
-    market: "ID",
-    color: "#ffb35c",
-    note: "",
-    reasons: [
-      { label: "Unofficial Doc", value: 42 },
-      { label: "Mismatch Doc Type", value: 8 },
-      { label: "Not Recent Doc", value: 8 },
-      { label: "Mismatch Name/NRIC/ID", value: 6 },
-      { label: "Low Quality Doc", value: 2 },
-      { label: "Password protected", value: 1 },
-      { label: "Hard Reject", value: 1 },
-      { label: "Insufficient Doc", value: 0 },
-      { label: "Doc Amount Not Match", value: 0 },
-      { label: "Others", value: 0 },
-    ],
-  },
-  {
-    market: "MY",
-    color: "#ffd166",
-    note: "",
-    reasons: [
-      { label: "Insufficient Doc", value: 51 },
-      { label: "Unofficial Doc", value: 16 },
-      { label: "Not Recent Doc", value: 14 },
-      { label: "Doc Amount Not Match", value: 12 },
-      { label: "Password protected", value: 10 },
-      { label: "Mismatch Doc Type", value: 9 },
-      { label: "Mismatch Name/NRIC/ID", value: 5 },
-      { label: "Low Quality Doc", value: 2 },
-      { label: "Hard Reject", value: 1 },
-      { label: "Others", value: 0 },
-    ],
-  },
-  {
-    market: "PH",
-    color: "#2ec4b6",
-    note: "",
-    reasons: [
-      { label: "Others", value: 4 },
-      { label: "Not Recent Doc", value: 2 },
-      { label: "Insufficient Doc", value: 1 },
-      { label: "Unofficial Doc", value: 1 },
-      { label: "Mismatch Doc Type", value: 1 },
-      { label: "Password protected", value: 1 },
-      { label: "Mismatch Name/NRIC/ID", value: 0 },
-      { label: "Low Quality Doc", value: 0 },
-      { label: "Hard Reject", value: 0 },
-      { label: "Doc Amount Not Match", value: 0 },
-    ],
-  },
-  {
-    market: "VN",
-    color: "#6a5acd",
-    note: "Sample too small",
-    reasons: [],
-  },
-  {
-    market: "TH",
-    color: "#1982c4",
-    note: "",
-    reasons: [
-      { label: "Mismatch Doc Type", value: 94 },
-      { label: "Mismatch Name/NRIC/ID", value: 77 },
-      { label: "Not Recent Doc", value: 37 },
-      { label: "Unofficial Doc", value: 2 },
-      { label: "Low Quality Doc", value: 1 },
-      { label: "Password protected", value: 1 },
-      { label: "Insufficient Doc", value: 0 },
-      { label: "Hard Reject", value: 0 },
-      { label: "Doc Amount Not Match", value: 0 },
-      { label: "Others", value: 0 },
-    ],
-  },
-];
-
-const whitelistOtaUpdatedAt = "2026-07-24";
-
-const whitelistOtaData = [
-  { track: "SPL", ID: "Whitelist 3M", MY: "Whitelist 900k", PH: "Whitelist 100k", TH: "OTA", VN: "Whitelist 18k" },
-  { track: "BCL", ID: "Whitelist 700k", MY: "Not used", PH: "Whitelist 100k", TH: "OTA", VN: "Whitelist 18k" },
-  { track: "SCL", ID: "Whitelist 341,751", MY: "Whitelist 21,001", PH: "Whitelist 13,463", TH: "Whitelist 22,594", VN: "Whitelist 594" },
-];
-
-const uiPanels = [
-  {
-    key: "old",
-    label: "Old UI",
-    images: [{ type: "image", src: "./assets/old-ui.png", alt: "Old UI main screen" }],
-    highlights: [
-      {
-        title: "Batch Upload",
-        body: "Users have to upload multiple document type in one time. It is hard for them to get so many documents in a short time.",
-      },
-      {
-        title: "Unclear Application Progress",
-        body: "User need enter result page to know the detail, which is not intuitive.",
-      },
-      {
-        title: "Data Collection",
-        body: "Collect payroll frequency and salary to verify document data.",
-      },
-    ],
-  },
-  {
-    key: "new",
-    label: "New UI",
-    images: [
-      { type: "image", src: "./assets/new-ui.png", alt: "New UI limit increment screen" },
-      { type: "image", src: "./assets/new-ui-upload-progress.png", alt: "New UI upload payslip progress screen" },
-    ],
-    highlights: [
-      {
-        title: "Submit one by one",
-        body: "We change to allow user submit one by one to get limit increase.",
-      },
-      {
-        title: "Intuitive Application Status Display",
-        body: "We will display different apply status on the homepage, user can know the detail.",
-      },
-      {
-        title: "Optional Desired Limit Collection",
-        body: "Collect user desired limit to know user's real request, which will be considered by risk policy team.",
-      },
-    ],
-  },
-];
-
-const featureProgressGroups = [
-  {
-    stage: "Live Testing",
-    items: [
-      {
-        eta: "July v1",
-        feature: "[MY][SPL/BCL/TL/2W] remove 2W from sharing",
-      },
-    ],
-  },
-  {
-    stage: "UAT",
-    items: [],
-  },
-  {
-    stage: "Under Dev",
-    items: [
-      {
-        eta: "July v2",
-        feature: "[ID][SPL/BCL] CLI Revamp",
-      },
-      {
-        eta: "TBD",
-        feature: "[MY][SPL/BCL/TL/2W] Income Streamline",
-      },
-      {
-        eta: "July v1",
-        feature: "Entrance Data tracking point fix",
-      },
-    ],
-  },
-  {
-    stage: "PRD Preparing",
-    items: [
-      {
-        eta: "Aug v1",
-        feature: "[ID][SCL] Enhancement",
-      },
-      {
-        eta: "Aug v2",
-        feature: "[PH][SPL/BCL] CLI Revamp + QC model",
-      },
-      {
-        eta: "Sep",
-        feature: "[SG][SPL] CLI",
-      },
-    ],
-  },
-];
-
-const chartSeries = [
-  { key: "ID", color: "#ff6b35" },
-  { key: "MY", color: "#ff9f1c" },
-  { key: "PH", color: "#2ec4b6" },
-  { key: "VN", color: "#6a5acd" },
-  { key: "TH", color: "#1982c4" },
-];
 
 const refs = {
-  daySelect: document.querySelector("#daySelect"),
+  monthSelect: document.querySelector("#monthSelect"),
   productSelect: document.querySelector("#productSelect"),
-  stepRail: document.querySelector("#stepRail"),
-  selectedDayTitle: document.querySelector("#selectedDayTitle"),
+  sourceCaption: document.querySelector("#sourceCaption"),
+  sourceLink: document.querySelector("#sourceLink"),
+  sourceTab: document.querySelector("#sourceTab"),
+  summaryContext: document.querySelector("#summaryContext"),
+  funnelContext: document.querySelector("#funnelContext"),
   kpiGrid: document.querySelector("#kpiGrid"),
-  funnelBars: document.querySelector("#funnelBars"),
-  detailTitle: document.querySelector("#detailTitle"),
-  detailVisual: document.querySelector("#detailVisual"),
-  rejectReasonGrid: document.querySelector("#rejectReasonGrid"),
-  dailyTableHead: document.querySelector("#dailyTableHead"),
-  dailyTableBody: document.querySelector("#dailyTableBody"),
-  whitelistUpdatedAt: document.querySelector("#whitelistUpdatedAt"),
-  whitelistOtaBody: document.querySelector("#whitelistOtaBody"),
-  stepChart: document.querySelector("#stepChart"),
-  uiShowcase: document.querySelector("#uiShowcase"),
-  featureProgress: document.querySelector("#featureProgress"),
+  stepGrid: document.querySelector("#stepGrid"),
+  dataDescription: document.querySelector("#dataDescription"),
+  stepTableHead: document.querySelector("#stepTableHead"),
+  stepTableBody: document.querySelector("#stepTableBody"),
+  chartMarketSelect: document.querySelector("#chartMarketSelect"),
+  trendSelection: document.querySelector("#trendSelection"),
+  trendLegend: document.querySelector("#trendLegend"),
+  stepTrendChart: document.querySelector("#stepTrendChart"),
+  trendTableHead: document.querySelector("#trendTableHead"),
+  trendTableBody: document.querySelector("#trendTableBody"),
+  footerPeriod: document.querySelector("#footerPeriod"),
 };
 
 const state = {
-  selectedMarket: "MY",
-  selectedProduct: "SPL",
-  selectedStep: "submitDoc",
+  monthKey: monthlyData[0].key,
+  product: "SPL",
+  chartMarket: "ID",
+  selectedStep: null,
 };
 
 bootstrap();
 
 function bootstrap() {
-  renderMarketOptions();
-  renderProductOptions();
-  ensureSelectedStep();
-  bindEvents();
-  renderAll();
-}
-
-function bindEvents() {
-  refs.daySelect.addEventListener("change", (event) => {
-    state.selectedMarket = event.target.value;
-    renderAll();
-  });
-
-  refs.productSelect.addEventListener("change", (event) => {
-    state.selectedProduct = event.target.value;
-    ensureSelectedStep();
-    renderAll();
-  });
-}
-
-function renderAll() {
-  ensureSelectedStep();
-  renderStepRail();
-  renderKpis();
-  renderDetail();
-  renderRejectReasonDistribution();
-  renderStepChart();
-  renderMarketTable();
-  renderWhitelistOta();
-  renderUiShowcase();
-  renderFeatureProgress();
-}
-
-function renderMarketOptions() {
-  refs.daySelect.innerHTML = getCurrentDataset()
-    .map(
-      (item) =>
-        `<option value="${item.market}" ${item.market === state.selectedMarket ? "selected" : ""}>${item.market}</option>`,
-    )
+  refs.monthSelect.innerHTML = monthlyData
+    .map((month) => `<option value="${month.key}">${month.label}</option>`)
     .join("");
-}
 
-function renderProductOptions() {
   refs.productSelect.innerHTML = Object.keys(productDefinitions)
-    .map(
-      (product) =>
-        `<option value="${product}" ${product === state.selectedProduct ? "selected" : ""}>${product}</option>`,
-    )
+    .map((product) => `<option value="${product}">${product}</option>`)
+    .join("");
+  refs.chartMarketSelect.innerHTML = marketOrder
+    .map((market) => `<option value="${market}">${market}</option>`)
+    .join("");
+
+  refs.monthSelect.value = state.monthKey;
+  refs.productSelect.value = state.product;
+  refs.chartMarketSelect.value = state.chartMarket;
+  refs.monthSelect.addEventListener("change", (event) => {
+    state.monthKey = event.target.value;
+    state.selectedStep = null;
+    renderReport();
+  });
+  refs.productSelect.addEventListener("change", (event) => {
+    state.product = event.target.value;
+    state.selectedStep = null;
+    renderReport();
+  });
+  refs.chartMarketSelect.addEventListener("change", (event) => {
+    state.chartMarket = event.target.value;
+    renderTrendChart(productDefinitions[state.product]);
+  });
+
+  renderReport();
+}
+
+function renderReport() {
+  const month = getSelectedMonth();
+  const definition = productDefinitions[state.product];
+  const records = getSelectedRecords();
+  const recordCount = records.length;
+
+  refs.sourceCaption.textContent = `Income Doc Project Analysis · ${month.label}`;
+  refs.sourceTab.textContent = `Source tab: ${month.tab}`;
+  refs.sourceLink.href = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit?gid=${month.gid}#gid=${month.gid}`;
+  refs.summaryContext.textContent = `${month.label} · ${state.product} · ${recordCount} markets with data`;
+  refs.funnelContext.textContent = `${state.product} · ${month.label}`;
+  refs.dataDescription.textContent = definition.description;
+  refs.footerPeriod.textContent = `${month.label} · ${state.product}`;
+
+  renderSummary(records, definition);
+  renderTrendChart(definition);
+  renderFunnel(records, definition);
+  renderStepTable(records, definition);
+}
+
+function renderSummary(records, definition) {
+  refs.kpiGrid.innerHTML = definition.summary
+    .map((metric) => {
+      const isRate = Boolean(metric.numerator && metric.denominator);
+      const value = isRate
+        ? formatPercent(ratio(sumField(records, metric.numerator), sumField(records, metric.denominator)), metric.digits ?? 2)
+        : formatNumber(sumField(records, metric.key));
+
+      return `
+        <article class="kpi-card">
+          <span class="kpi-label">${metric.label}</span>
+          <strong class="kpi-value">${value}</strong>
+          <span class="kpi-formula">${metric.formula}</span>
+        </article>
+      `;
+    })
     .join("");
 }
 
-function renderStepRail() {
-  const selected = getSelectedRecord();
-  const steps = getCurrentProductDefinition().steps;
+function renderTrendChart(definition) {
+  const months = [...monthlyData].reverse();
+  const rows = definition.rows.flatMap((step) => [
+    { step: step.step, label: step.label, key: step.key, child: false },
+    ...(step.children ?? []).map((child) => ({
+      step: "↳",
+      label: child.label,
+      key: child.key,
+      child: true,
+      parentStep: step.step,
+      parentLabel: step.label,
+    })),
+  ]);
+  const fieldIndexes = Object.fromEntries(fields[state.product].map((field, index) => [field, index]));
+  const monthValues = months.map((month) => {
+    const values = month.products[state.product]?.[state.chartMarket];
+    return rows.map((row) => {
+      const value = values?.[fieldIndexes[row.key]];
+      return Number.isFinite(value) ? value : null;
+    });
+  });
 
-  refs.stepRail.innerHTML = steps
+  refs.trendSelection.textContent = `${state.product} · ${state.chartMarket} · July–September 2026`;
+  refs.trendLegend.innerHTML = months
     .map(
-      (step) => `
-        <button class="step-card ${step.key === state.selectedStep ? "active" : ""}" data-step="${step.key}">
-          <small>${step.stepLabel}</small>
-          <strong>${step.label}</strong>
-          <p>${formatNumber(selected[step.key])}</p>
-        </button>
+      (month, index) => `
+        <span class="trend-legend-item">
+          <span class="trend-legend-swatch" style="background:${trendColors[index]}"></span>
+          ${month.label}
+        </span>
       `,
     )
     .join("");
 
-  refs.stepRail.querySelectorAll(".step-card").forEach((button) => {
+  const width = Math.max(930, rows.length * 78 + 110);
+  const height = 410;
+  const margin = { top: 24, right: 22, bottom: 88, left: 62 };
+  const innerWidth = width - margin.left - margin.right;
+  const innerHeight = height - margin.top - margin.bottom;
+  const baseline = margin.top + innerHeight;
+  const groupWidth = innerWidth / rows.length;
+  const barWidth = Math.min(16, (groupWidth - 18) / months.length);
+  const barGap = Math.max(2, Math.min(4, (groupWidth - barWidth * months.length) / (months.length + 1)));
+  const ticks = [0, 25, 50, 75, 100];
+  const y = (percentage) => baseline - (percentage / 100) * innerHeight;
+  const grid = ticks
+    .map(
+      (tick) => `
+        <line x1="${margin.left}" y1="${y(tick)}" x2="${width - margin.right}" y2="${y(tick)}" class="trend-grid-line" />
+        <text x="${margin.left - 10}" y="${y(tick) + 3}" text-anchor="end" class="trend-axis-label">${tick}%</text>
+      `,
+    )
+    .join("");
+
+  const bars = rows
+    .map((row, rowIndex) => {
+      const values = monthValues.map((series) => series[rowIndex]);
+      const finiteValues = values.filter((value) => Number.isFinite(value));
+      const maxValue = Math.max(...finiteValues, 0);
+      const center = margin.left + groupWidth * (rowIndex + 0.5);
+      const clusterWidth = barWidth * months.length + barGap * (months.length - 1);
+      const startX = center - clusterWidth / 2;
+      const barsForMonth = values
+        .map((value, monthIndex) => {
+          if (!Number.isFinite(value)) {
+            return "";
+          }
+
+          const x = startX + monthIndex * (barWidth + barGap);
+          const monthName = months[monthIndex].label;
+          const stepName = row.child ? `${row.parentStep} ${row.parentLabel} · ${row.label}` : `${row.step} ${row.label}`;
+          const fullLabel = `${monthName} · ${stepName}: ${formatNumber(value)}`;
+          const color = trendColors[monthIndex];
+
+          if (value === 0 || maxValue === 0) {
+            return `<line x1="${x}" y1="${baseline - 1}" x2="${x + barWidth}" y2="${baseline - 1}" class="trend-empty-mark" stroke="${color}"><title>${fullLabel}</title></line>`;
+          }
+
+          const barHeight = Math.max(2, (value / maxValue) * innerHeight);
+          const barY = baseline - barHeight;
+          return `<rect x="${x}" y="${barY}" width="${barWidth}" height="${barHeight}" fill="${color}" class="trend-bar"><title>${fullLabel}</title></rect>`;
+        })
+        .join("");
+      const codeLabel = row.step === "↳" ? "↳" : row.step;
+      const shortName = trendShortNames[row.key] ?? row.label;
+
+      return `
+        ${barsForMonth}
+        <text x="${center}" y="${baseline + 18}" text-anchor="middle" class="trend-step-code">${codeLabel}</text>
+        <text x="${center}" y="${baseline + 34}" text-anchor="middle" class="trend-step-name">${shortName}</text>
+      `;
+    })
+    .join("");
+
+  refs.stepTrendChart.setAttribute("viewBox", `0 0 ${width} ${height}`);
+  refs.stepTrendChart.setAttribute("width", width);
+  refs.stepTrendChart.setAttribute("height", height);
+  refs.stepTrendChart.setAttribute("aria-label", `Monthly step counts for ${state.product} in ${state.chartMarket}`);
+  refs.stepTrendChart.innerHTML = `
+    <title>${state.product} step volume in ${state.chartMarket}, July to September 2026</title>
+    <text x="16" y="${margin.top + innerHeight / 2}" text-anchor="middle" class="trend-axis-title" transform="rotate(-90 16 ${margin.top + innerHeight / 2})">Share of this step’s three-month maximum</text>
+    ${grid}
+    <line x1="${margin.left}" y1="${baseline}" x2="${width - margin.right}" y2="${baseline}" class="trend-axis-line" />
+    ${bars}
+  `;
+
+  refs.trendTableHead.innerHTML = `
+    <tr>
+      <th scope="col">Step</th>
+      <th scope="col">Stage</th>
+      ${months.map((month) => `<th scope="col">${month.label}</th>`).join("")}
+    </tr>
+  `;
+  refs.trendTableBody.innerHTML = rows
+    .map((row, rowIndex) => {
+      const values = monthValues.map((series) => series[rowIndex]);
+      return `
+        <tr class="${row.child ? "child-row" : "main-row"}">
+          <td>${row.step}</td>
+          <td>${row.label}</td>
+          ${values.map((value) => `<td>${Number.isFinite(value) ? formatNumber(value) : "—"}</td>`).join("")}
+        </tr>
+      `;
+    })
+    .join("");
+}
+
+function renderFunnel(records, definition) {
+  refs.stepGrid.innerHTML = definition.funnel
+    .map((step) => {
+      const count = sumField(records, step.key);
+      const conversion = step.from ? ratio(count, sumField(records, step.from)) : null;
+      const rateText = step.from
+        ? `${step.rateLabel} · ${formatPercent(conversion, 2)}`
+        : "Funnel starting point";
+      const barWidth = step.from && Number.isFinite(conversion)
+        ? Math.max(0, Math.min(100, conversion * 100))
+        : 100;
+
+      return `
+        <button class="step-card ${state.selectedStep === step.key ? "active" : ""}" type="button" data-step-card="${step.key}" aria-pressed="${state.selectedStep === step.key}">
+          <span class="step-topline">
+            <span class="step-number">${step.step}</span>
+            <span class="step-order-dot" aria-hidden="true"></span>
+          </span>
+          <span class="step-label">${step.label}</span>
+          <strong class="step-count">${formatNumber(count)}</strong>
+          <span class="step-rate">${rateText}</span>
+          <span class="step-track" aria-hidden="true"><span style="width:${barWidth}%"></span></span>
+        </button>
+      `;
+    })
+    .join("");
+
+  refs.stepGrid.querySelectorAll("[data-step-card]").forEach((button) => {
     button.addEventListener("click", () => {
-      state.selectedStep = button.dataset.step;
-      renderStepRail();
-      renderDetail();
+      state.selectedStep = button.dataset.stepCard;
+      updateStepHighlight();
+      const targetRow = refs.stepTableBody.querySelector(`[data-step="${state.selectedStep}"]`);
+      targetRow?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
   });
 }
 
-function renderKpis() {
-  const selected = getSelectedRecord();
-  const productDef = getCurrentProductDefinition();
-
-  refs.selectedDayTitle.textContent = `${selected.market} ${productDef.titleLabel} (${reportPeriod})`;
-
-  refs.kpiGrid.innerHTML = productDef.kpis
-    .map(
-      (item) =>
-        `<div class="kpi-card"><span>${item.label}</span><strong>${displayPercent(
-          item.calc(selected),
-          item.digits ?? 2,
-        )}</strong><em>${item.delta}</em></div>`,
-    )
-    .join("");
-
-  refs.funnelBars.innerHTML = productDef.bars
-    .map((item) => {
-      const leftCount = selected[item.leftKey];
-      const rightCount = selected[item.rightKey];
-      return `
-        <div class="funnel-row">
-          <div class="funnel-meta">
-            <strong>${item.label}</strong>
-            <div class="funnel-counts">
-              <span>${item.leftLabel}: ${formatNumber(leftCount)}</span>
-              <span>${item.rightLabel}: ${formatNumber(rightCount)}</span>
-            </div>
-          </div>
-          <div>
-            <div class="bar-track">
-              <div class="bar-current" style="width: ${barWidth(ratio(rightCount, leftCount))}%"></div>
-            </div>
-            <div class="bar-values">
-              <span>${displayPercent(ratio(rightCount, leftCount), item.digits ?? 2)}</span>
-            </div>
-          </div>
-        </div>
-      `;
-    })
-    .join("");
-}
-
-function renderDetail() {
-  const stepDef = getCurrentStepDefinition();
-  const detailDef = stepDetailDefinitions[state.selectedStep] ?? {};
-
-  refs.detailTitle.textContent = stepDef.label;
-
-  if (detailDef.visualType === "success-distribution") {
-    refs.detailVisual.innerHTML = renderSuccessDistribution();
-    return;
-  }
-
-  refs.detailVisual.innerHTML = `
-    <div class="callout-list">
-      <div class="callout-item">
-        <strong>${state.selectedProduct} · ${stepDef.label}</strong>
-        <p>${detailDef.summary ?? "This step shows the current conversion volume for the selected market and product."}</p>
-      </div>
-      <div class="callout-item">
-        <strong>Tracking logic</strong>
-        <p>${detailDef.formula ?? "Displayed directly from the selected product dataset."}</p>
-      </div>
-    </div>
-    ${
-      detailDef.visual
-        ? `<div class="detail-visual-frame ${detailDef.visual.compact ? "compact" : ""}">
-            <img class="detail-visual-image ${detailDef.visual.compact ? "compact" : ""}" src="${detailDef.visual.src}" alt="${detailDef.visual.alt}" />
-          </div>`
-        : ""
-    }
+function renderStepTable(records, definition) {
+  refs.stepTableHead.innerHTML = `
+    <tr>
+      <th scope="col">Step / stage</th>
+      ${marketOrder.map((market) => `<th scope="col">${market}</th>`).join("")}
+      <th scope="col">Overall</th>
+      <th scope="col">Conversion</th>
+    </tr>
   `;
-}
 
-function renderSuccessDistribution() {
-  const selectedDistribution = successDistribution.find((item) => item.market === state.selectedMarket);
-
-  if (!selectedDistribution) {
-    return `<div class="callout-item"><p>No limit increase mix is available for the selected market.</p></div>`;
-  }
-
-  return `
-    <div class="success-chart-panel">
-      <div class="success-chart-header">
-        <strong>${selectedDistribution.market} approved limit increase mix</strong>
-        <span>Temp vs Perm increase ranges</span>
-      </div>
-      <div class="success-market-grid">
-        <section class="success-market-card">
-          <div class="success-market-head">
-            <span class="success-market-dot" style="background:${selectedDistribution.color}"></span>
-            <strong>${selectedDistribution.market}</strong>
-          </div>
-          ${renderSuccessGroup("Temp Limit Increase (USD)", selectedDistribution.temp, selectedDistribution.color)}
-          ${renderSuccessGroup("Perm Limit Increase (USD)", selectedDistribution.perm, selectedDistribution.color)}
-        </section>
-      </div>
-    </div>
-  `;
-}
-
-function renderSuccessGroup(title, rows, color) {
-  if (!rows.length) {
-    return `
-      <div class="success-group">
-        <span class="success-group-title">${title}</span>
-        <p class="success-empty">No highlighted range shared.</p>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="success-group">
-      <span class="success-group-title">${title}</span>
-      <div class="success-bars">
-        ${rows
-          .map(
-            (row) => `
-              <div class="success-row">
-                <div class="success-row-meta">
-                  <span>${row.range}</span>
-                  <strong>${row.display}</strong>
-                </div>
-                <div class="success-bar-track">
-                  <div class="success-bar-fill" style="width:${Math.max(6, Math.min(100, row.value))}%; background:${color};"></div>
-                </div>
-              </div>
-            `,
-          )
-          .join("")}
-      </div>
-    </div>
-  `;
-}
-
-function renderMarketTable() {
-  const dataset = getCurrentDataset();
-  const productDef = getCurrentProductDefinition();
-
-  refs.dailyTableHead.innerHTML = productDef.tableColumns
-    .map((column) => `<th>${column.label}</th>`)
-    .join("");
-
-  refs.dailyTableBody.innerHTML = dataset
-    .map((item) => {
-      const isSelected = item.market === state.selectedMarket;
-      return `
-        <tr>
-          ${productDef.tableColumns
-            .map((column) => renderTableCell(item, column, isSelected))
-            .join("")}
-        </tr>
-      `;
-    })
-    .join("");
-}
-
-function renderTableCell(item, column, isSelected) {
-  if (column.type === "text") {
-    return `<td${isSelected ? ' class="strong-cell"' : ""}>${item.market}</td>`;
-  }
-
-  if (column.type === "note") {
-    return `<td>${item.noteOverride ?? marketNotes[item.market] ?? "-"}</td>`;
-  }
-
-  if (column.type === "percent") {
-    return `<td>${displayPercent(column.calc(item), column.digits ?? 2)}</td>`;
-  }
-
-  return `<td>${formatNumber(item[column.key])}</td>`;
-}
-
-function renderRejectReasonDistribution() {
-  const maxReasonCount = Math.max(...rejectReasonDistribution.map((market) => market.reasons.length), 0);
-
-  refs.rejectReasonGrid.innerHTML = rejectReasonDistribution
-    .map((market) => {
-      const maxValue = Math.max(...market.reasons.map((item) => item.value), 0);
-      return `
-        <section class="reject-market-card">
-          <div class="reject-market-head">
-            <span class="reject-market-dot" style="background:${market.color}"></span>
-            <strong>${market.market}</strong>
-          </div>
-          ${
-            market.note
-              ? `<div class="reject-market-note-wrap">
-                  <p class="reject-market-note">${market.note}</p>
-                  <div class="reject-bars reject-bars-placeholder">
-                    ${Array.from({ length: maxReasonCount }, () => `
-                      <div class="reject-row placeholder">
-                        <div class="reject-row-meta">
-                          <span>&nbsp;</span>
-                          <strong>&nbsp;</strong>
-                        </div>
-                        <div class="reject-bar-track">
-                          <div class="reject-bar-fill placeholder"></div>
-                        </div>
-                      </div>
-                    `).join("")}
-                  </div>
-                </div>`
-              : `<div class="reject-bars">
-                  ${market.reasons
-                    .map((item) => {
-                      const width = maxValue > 0 ? Math.max(6, (item.value / maxValue) * 100) : 0;
-                      return `
-                        <div class="reject-row">
-                          <div class="reject-row-meta">
-                            <span>${item.label}</span>
-                            <strong>${item.value}</strong>
-                          </div>
-                          <div class="reject-bar-track">
-                            <div class="reject-bar-fill" style="width:${width}%; background:${market.color};"></div>
-                          </div>
-                        </div>
-                      `;
-                    })
-                    .join("")}
-                </div>`
-          }
-        </section>
-      `;
-    })
-    .join("");
-}
-
-function renderWhitelistOta() {
-  refs.whitelistUpdatedAt.textContent = whitelistOtaUpdatedAt;
-  refs.whitelistOtaBody.innerHTML = whitelistOtaData
-    .map(
-      (item) => `
-        <tr>
-          <td class="${item.track === state.selectedProduct ? "strong-cell" : ""}">${item.track}</td>
-          <td class="${state.selectedMarket === "ID" ? "strong-cell" : ""}">${item.ID}</td>
-          <td class="${state.selectedMarket === "MY" ? "strong-cell" : ""}">${item.MY}</td>
-          <td class="${state.selectedMarket === "PH" ? "strong-cell" : ""}">${item.PH}</td>
-          <td class="${state.selectedMarket === "TH" ? "strong-cell" : ""}">${item.TH}</td>
-          <td class="${state.selectedMarket === "VN" ? "strong-cell" : ""}">${item.VN}</td>
-        </tr>
-      `,
-    )
-    .join("");
-}
-
-function renderStepChart() {
-  const dataset = getCurrentDataset();
-  const chartSteps = getCurrentProductDefinition().chartSteps;
-  const width = Math.max(920, 180 * chartSteps.length);
-  const height = 460;
-  const margin = { top: 32, right: 36, bottom: 84, left: 88 };
-  const innerWidth = width - margin.left - margin.right;
-  const innerHeight = height - margin.top - margin.bottom;
-  const maxValue = Math.max(
-    ...dataset.flatMap((item) =>
-      chartSteps.map((step) => (Number.isFinite(item[step.key]) ? item[step.key] : 0)),
-    ),
-  );
-  const safeMaxValue = Math.max(maxValue, 1);
-  const tickCount = 4;
-  const yTicks = Array.from({ length: tickCount + 1 }, (_, index) =>
-    Math.round((safeMaxValue / tickCount) * (tickCount - index)),
-  );
-
-  const y = (value) => margin.top + innerHeight - (value / safeMaxValue) * innerHeight;
-  const x = (index) => margin.left + (innerWidth / Math.max(chartSteps.length - 1, 1)) * index;
-
-  const gridLines = yTicks
-    .map(
-      (tick) => `
-        <line x1="${margin.left}" y1="${y(tick)}" x2="${width - margin.right}" y2="${y(tick)}" class="chart-grid-line" />
-        <text x="${margin.left - 16}" y="${y(tick) + 4}" text-anchor="end" class="chart-axis-label">${formatCompactNumber(
-          tick,
-        )}</text>
-      `,
-    )
-    .join("");
-
-  const stepLabels = chartSteps
-    .map(
-      (step, index) => `
-        <text x="${x(index)}" y="${height - 34}" text-anchor="middle" class="chart-step-label">${step.label}</text>
-        <text x="${x(index)}" y="${height - 14}" text-anchor="middle" class="chart-step-subtext">${step.fullLabel}</text>
-      `,
-    )
-    .join("");
-
-  const series = chartSeries
-    .map((seriesItem) => {
-      const market = dataset.find((item) => item.market === seriesItem.key);
-      if (!market) {
-        return "";
-      }
-
-      const points = chartSteps.map((step, index) => `${x(index)},${y(Number.isFinite(market[step.key]) ? market[step.key] : 0)}`).join(" ");
-      const circles = chartSteps
-        .map(
-          (step, index) => `
-            <circle cx="${x(index)}" cy="${y(Number.isFinite(market[step.key]) ? market[step.key] : 0)}" r="${
-              state.selectedMarket === market.market ? 5 : 4
-            }" fill="${seriesItem.color}" class="chart-point" />
-          `,
-        )
+  refs.stepTableBody.innerHTML = definition.rows
+    .map((step) => {
+      const mainRow = renderTableRow(step, records);
+      const childRows = (step.children ?? [])
+        .map((child) => renderTableRow(child, records, step))
         .join("");
-
-      return `
-        <polyline
-          points="${points}"
-          fill="none"
-          stroke="${seriesItem.color}"
-          stroke-width="${state.selectedMarket === market.market ? 4 : 3}"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          opacity="${state.selectedMarket === market.market ? 1 : 0.78}"
-        />
-        ${circles}
-      `;
+      return mainRow + childRows;
     })
     .join("");
 
-  const legend = chartSeries
-    .filter((item) => dataset.some((market) => market.market === item.key))
-    .map(
-      (item) => `
-        <div class="chart-legend-item ${state.selectedMarket === item.key ? "active" : ""}">
-          <span class="chart-legend-dot" style="background:${item.color}"></span>
-          <span>${item.key}</span>
-        </div>
-      `,
-    )
-    .join("");
+  updateStepHighlight();
+}
 
-  refs.stepChart.innerHTML = `
-    <div class="chart-legend">${legend}</div>
-    <div class="chart-frame">
-      <svg viewBox="0 0 ${width} ${height}" class="chart-svg" role="img" aria-label="Line chart of users by step, market, and product">
-        ${gridLines}
-        <line x1="${margin.left}" y1="${margin.top + innerHeight}" x2="${width - margin.right}" y2="${
-          margin.top + innerHeight
-        }" class="chart-axis-line" />
-        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${margin.top + innerHeight}" class="chart-axis-line" />
-        ${series}
-        ${stepLabels}
-      </svg>
-    </div>
+function renderTableRow(row, records, parent = null) {
+  const total = sumField(records, row.key);
+  const rate = row.rateFrom ? ratio(total, sumField(records, row.rateFrom)) : null;
+  const marketCells = marketOrder
+    .map((market) => {
+      const record = records.find((item) => item.market === market);
+      const value = record ? record[row.key] : null;
+      return `<td>${value === null || value === undefined ? "—" : formatNumber(value)}</td>`;
+    })
+    .join("");
+  const rowClass = parent ? "child-row" : "main-row";
+  const dataAttribute = parent ? `data-parent-step="${parent.key}"` : `data-step="${row.key}"`;
+  const labelClass = parent ? "table-step-label child" : "table-step-label";
+  const stepIndex = parent ? "" : `<span class="table-step-index">${row.step}</span>`;
+
+  return `
+    <tr class="${rowClass}" ${dataAttribute}>
+      <td><span class="${labelClass}">${stepIndex}<span>${row.label}</span></span></td>
+      ${marketCells}
+      <td>${formatNumber(total)}</td>
+      <td class="table-rate">${row.rateFrom ? formatPercent(rate, 2) : "—"}</td>
+    </tr>
   `;
 }
 
-function renderUiShowcase() {
-  refs.uiShowcase.innerHTML = uiPanels
-    .map(
-      (panel) => `
-        <div class="ui-panel">
-          <div class="phone-stack">
-            <div class="phone-label">${panel.label}</div>
-            <div class="phone-gallery ${
-              panel.images.length === 2 ? "two-shot-row" : panel.images.length > 1 ? "multi-shot" : "single-shot"
-            }">
-              ${panel.images
-                .map(
-                  (image, index) =>
-                    `<img class="phone-shot" src="${image.src}" alt="${image.alt ?? `${panel.label} screen ${index + 1}`}" />`,
-                )
-                .join("")}
-            </div>
-          </div>
-          <div class="callout-list">
-            ${panel.highlights
-              .map(
-                (item) =>
-                  `<div class="callout-item"><strong>${item.title}</strong><p>${item.body}</p></div>`,
-              )
-              .join("")}
-          </div>
-        </div>
-      `,
-    )
-    .join("");
+function updateStepHighlight() {
+  refs.stepGrid.querySelectorAll("[data-step-card]").forEach((button) => {
+    const active = button.dataset.stepCard === state.selectedStep;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+
+  refs.stepTableBody.querySelectorAll("tr").forEach((row) => {
+    const active = row.dataset.step === state.selectedStep || row.dataset.parentStep === state.selectedStep;
+    row.classList.toggle("is-highlighted", active);
+  });
 }
 
-function renderFeatureProgress() {
-  refs.featureProgress.innerHTML = featureProgressGroups
-    .map(
-      (group) => `
-        <section class="progress-group">
-          <div class="progress-stage">${group.stage}</div>
-          ${
-            group.items.length
-              ? `<div class="progress-items">
-                  ${group.items
-                    .map(
-                      (item) => `
-                        <article class="progress-item">
-                          <div class="progress-row">
-                            <span class="progress-label">ETA</span>
-                            <strong>${item.eta}</strong>
-                          </div>
-                          <div class="progress-row progress-feature">
-                            <span class="progress-label">Feature</span>
-                            <span>${item.feature}</span>
-                          </div>
-                        </article>
-                      `,
-                    )
-                    .join("")}
-                </div>`
-              : `<div class="progress-empty">No item in this stage yet.</div>`
-          }
-        </section>
-      `,
-    )
-    .join("");
+function getSelectedMonth() {
+  return monthlyData.find((month) => month.key === state.monthKey) ?? monthlyData[0];
 }
 
-function getCurrentDataset() {
-  return productDatasets[state.selectedProduct] ?? productDatasets.SPL;
+function getSelectedRecords() {
+  const month = getSelectedMonth();
+  const productData = month.products[state.product];
+
+  return marketOrder
+    .filter((market) => Object.prototype.hasOwnProperty.call(productData, market))
+    .map((market) => {
+      const values = productData[market];
+      return {
+        market,
+        ...Object.fromEntries(fields[state.product].map((field, index) => [field, values[index] ?? null])),
+      };
+    });
 }
 
-function getSelectedRecord() {
-  return getCurrentDataset().find((item) => item.market === state.selectedMarket) ?? getCurrentDataset()[0];
+function sumField(records, key) {
+  return records.reduce((sum, record) => sum + (Number.isFinite(record[key]) ? record[key] : 0), 0);
 }
 
-function getCurrentProductDefinition() {
-  return productDefinitions[state.selectedProduct] ?? productDefinitions.SPL;
-}
-
-function getCurrentStepDefinition() {
-  return getCurrentProductDefinition().steps.find((item) => item.key === state.selectedStep) ?? getCurrentProductDefinition().steps[0];
-}
-
-function ensureSelectedStep() {
-  const steps = getCurrentProductDefinition().steps;
-  if (!steps.some((step) => step.key === state.selectedStep)) {
-    state.selectedStep = steps[0].key;
-  }
-}
-
-function ratio(a, b) {
-  if (!Number.isFinite(a) || !Number.isFinite(b) || b === 0) {
+function ratio(numerator, denominator) {
+  if (!Number.isFinite(numerator) || !Number.isFinite(denominator) || denominator === 0) {
     return null;
   }
-  return a / b;
-}
-
-function displayPercent(value, digits = 2) {
-  if (!Number.isFinite(value)) {
-    return "-";
-  }
-  return `${(value * 100).toFixed(digits)}%`;
+  return numerator / denominator;
 }
 
 function formatNumber(value) {
   if (!Number.isFinite(value)) {
-    return "-";
+    return "—";
   }
-  return new Intl.NumberFormat("en-US").format(value);
+  return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(value);
 }
 
-function formatCompactNumber(value) {
+function formatPercent(value, digits = 2) {
   if (!Number.isFinite(value)) {
-    return "-";
+    return "—";
   }
-  return new Intl.NumberFormat("en-US", {
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(value);
-}
-
-function barWidth(value) {
-  if (!Number.isFinite(value)) {
-    return 0;
-  }
-  return Math.max(0, Math.min(100, value * 100));
+  return `${(value * 100).toFixed(digits)}%`;
 }
